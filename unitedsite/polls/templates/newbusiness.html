@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>new business</title>
+</head>
+<body>
+这是新增界面
+
+      <form id="newbusiness-form" method="post" action="/polls/savebusiness/">
+         {% csrf_token %}
+  <table width="934" height="125" border="1">
+    <tbody>
+      <tr>
+          <td><label for="idbusinessinfo">N°：</label></td>
+          <td><input id="idbusinessinfo" name="idbusinessinfo" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="clientname">Client/客户：</label></td>
+          <td><input id="clientname" name="clientname" type="text" class="form-control"></td>
+      </tr><tr>
+           <td><label for="week">Week/周：</label></td>
+          <td><input id="week" name="week" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="estimated_load_date">ETL/预计装箱日期：</label></td>
+          <td><input id="estimated_load_date" name="estimated_load_date" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="pre_etd">ETD/预计开船日期：</label></td>
+          <td><input id="pre_etd" name="pre_etd" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="etd">ETD Real/实际开船日期：</label></td>
+          <td><input id="etd" name="etd" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="eta">ETA/预计到港日期：</label></td>
+          <td><input id="eta" name="eta" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="vessel_voyage">Vessel Voyage/船名航次：</label></td>
+          <td><input id="vessel_voyage" name="vessel_voyage" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="pol">POL/起运港：</label></td>
+          <td><input id="pol" name="pol" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="pod">POD/目的港：</label></td>
+          <td><input id="pod" name="pod" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="businessinfocol">Note/备注：</label></td>
+          <td><input id="businessinfocol" name="businessinfocol" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="numctrs">Ctrs Numeber/箱量</label> X <label for="type_ctrs">Ctrs Type/箱型：</label></td>
+          <td><input id="numctrs" name="numctrs" type="text" class="form-control"> X <input id="type_ctrs" name="type_ctrs" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="booking_no">#Booking/订舱号：</label></td>
+          <td><input id="booking_no" name="booking_no" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="master_no">#Master/主单号：</label></td>
+          <td><input id="master_no" name="master_no" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="num_hbls">Num HBL/子单数量(FCL/FCL):</label></td>
+          <td><input id="num_hbls" name="num_hbls" type="text" class="form-control"> x HBL</td>
+      </tr><tr>
+          <td><label for="container_no">Container/箱号：</label></td>
+          <td><input id="container_no" name="container_no" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="shipping_line">Line/船司：</label></td>
+          <td><input id="shipping_line" name="shipping_line" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="freeddday">Free D&D/免箱期：</label></td>
+          <td><input id="freeddday" name="freeddday" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="cost_org">O.F. Cost/成本运价：</label></td>
+          <td><input id="cost_org" name="cost_org" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="sale_org">O.F. Sale/销售运价：</label></td>
+          <td><input id="sale_org" name="sale_org" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="venta_dest">O.F.D.V/目的港运价：</label></td>
+          <td><input id="venta_dest" name="venta_dest" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="costhbl_dest_description">HBL Payment Detail/子单付款明细：</label></td>
+          <td><input id="costhbl_dest_description" name="costhbl_dest_description" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="costhbl_dest">HBL Payment Amount/子单付款金额：</label></td>
+          <td><input id="costhbl_dest" name="costhbl_dest" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="costhbl_dest_status">HBL Payment Status/子单付款状态：</label></td>
+          <td><input id="costhbl_dest_status" name="costhbl_dest_status" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="topaid_org_description">Deal Payment Detail/结算价付款明细：</label></td>
+          <td><input id="topaid_org_description" name="topaid_org_description" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="topaid_org">Deal Payment Amount/结算价付款金额：</label></td>
+          <td><input id="topaid_org" name="topaid_org" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="topaid_status">Deal Payment Status/结算价付款状态：</label></td>
+          <td><input id="topaid_status" name="topaid_status" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="toinvoice_dest_description">Inv. Income Detail/发票价收款明细：</label></td>
+          <td><input id="toinvoice_dest_description" name="toinvoice_dest_description" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="toinvoice_dest">Inv. Income Amount/发票价收款金额：</label></td>
+          <td><input id="toinvoice_dest" name="toinvoice_dest" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="toinvoice_dest_status">Inv. Income Status/发票价收款状态：</label></td>
+          <td><input id="toinvoice_dest_status" name="toinvoice_dest_status" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="profit">Profit/毛利：</label></td>
+          <td><input id="profit" name="profit" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="hbl_canjeado_status">HBL Canjeado Status/换单状态：</label></td>
+          <td><input id="hbl_canjeado_status" name="hbl_canjeado_status" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="devolution_ctrs_inidate">INI Devol_Ctrs/目的港提柜日期：</label></td>
+          <td><input id="devolution_ctrs_inidate" name="devolution_ctrs_inidate" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="devolution_ctrs_findate">END Devol_Ctrs/目的港还柜日期：</label></td>
+          <td><input id="devolution_ctrs_findate" name="devolution_ctrs_findate" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="operation_status">Status Finnish Op./操作是否已经完成：</label></td>
+          <td><input id="operation_status" name="operation_status" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="bl_type">BL Type/提单类型：</label></td>
+          <td><input id="bl_type" name="bl_type" type="text" class="form-control"></td>
+      </tr><tr>
+          <td><label for="release_type">Release Type/放单类型：</label></td>
+          <td><input id="release_type" name="release_type" type="text" class="form-control"></td>
+      </tr><tr>
+
+        <td><input type="submit" value="Create One/新增"
+                       class="btn btn-primary pull-right" /></td>
+        <td></td>
+
+      </tr>
+    </tbody>
+  </table>
+            </form>
+</body>
+</html>

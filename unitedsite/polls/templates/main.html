@@ -3,26 +3,108 @@
 <head>
 <meta charset="utf-8">
 <title>无标题文档</title>
+<style type="text/css">
+table tbody tr td {
+    font-family: Segoe, Segoe UI, DejaVu Sans, Trebuchet MS, Verdana, sans-serif;
+}
+#main-list table tbody tr td {
+    font-family: Segoe, Segoe UI, DejaVu Sans, Trebuchet MS, Verdana, sans-serif;
+}
+</style>
 </head>
 
 <body>
-<form id="main-list" method="post" action="/polls/login/">
+
+
+
+<form id="main-list" method="post" action="/polls/newBusiness/">
+{% csrf_token %}
   <table width="934" height="125" border="1">
     <tbody>
       <tr>
-        <td>aaa</td>
-        <td>bbb</td>
-        <td>ccc</td>
+          <td>N°</td>
+          <td>Client/客户</td>
+          <td>Week/周</td>
+          <td>ETL/预计装箱日期</td>
+          <td>ETD/预计开船日期</td>
+          <td>ETD Real/实际开船日期</td>
+          <td>ETA/预计到港日期</td>
+          <td>Vessel Voyage/船名航次</td>
+          <td>POL/起运港</td>
+          <td>POD/目的港</td>
+          <td>N,T de Ctrs/箱型箱量</td>
+          <td>#Booking/订舱号</td>
+          <td>#Master/主单号</td>
+          <td>Num HBL/子单数量</td>
+          <td>#Container/箱号</td>
+          <td>Line/船司</td>
+          <td>Free D&D/免箱期</td>
+          <td>O.F. Cost/成本运价</td>
+          <td>O.F. Sale/销售运价</td>
+          <td>O.F.D.V/目的港运价</td>
+          <td>HBL Payment Detail/子单付款明细</td>
+          <td>HBL Payment Amount/子单付款金额</td>
+          <td>HBL Payment Status/子单付款状态</td>
+          <td>Deal Payment Detail/结算价付款明细</td>
+          <td>Deal Payment Amount/结算价付款金额</td>
+          <td>Deal Payment Status/结算价付款状态</td>
+          <td>Inv. Income Detail/发票价收款明细</td>
+          <td>Inv. Income Amount/发票价收款金额</td>
+          <td>Inv. Income Status/发票价收款状态</td>
+          <td>Profit/毛利</td>
+          <td>HBL Canjeado Status/换单状态</td>
+          <td>INI Devol_Ctrs/目的港提柜日期</td>
+          <td>END Devol_Ctrs/目的港还柜日期</td>
+          <td>Status Finnish Op./操作是否已经完成</td>
+          <td>BL Type/提单类型</td>
+          <td>Release Type/放单类型</td>
       </tr>
+  {% for business in businessLists %}
       <tr>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
+        <td>{{ business.idbusinessinfo }}</td>
+        <td>{{ business.clientname }}</td>
+        <td>{{ business.week }}</td>
+        <td>{{ business.estimated_load_date }}</td>
+        <td>{{ business.pre_etd }}</td>
+        <td>{{ business.etd }}</td>
+        <td>{{ business.eta }}</td>
+        <td>{{ business.vessel_voyage }}</td>
+        <td>{{ business.pol }}</td>
+        <td>{{ business.pod }}</td>
+        <td>{{ business.numctrs }} X {{ business.type_ctrs }}</td>
+        <td>{{ business.booking_no }}</td>
+        <td>{{ business.master_no }}</td>
+        <td>{{ business.num_hbls }} x HBL FCL/FCL</td>
+        <td>{{ business.container_no }}</td>
+        <td>{{ business.shipping_line }}</td>
+        <td>{{ business.freeddday }}</td>
+        <td>{{ business.cost_org }}</td>
+        <td>{{ business.sale_org }}</td>
+        <td>{{ business.venta_dest }}</td>
+        <td>{{ business.costhbl_dest_description }}</td>
+        <td>{{ business.costhbl_dest }}</td>
+        <td>{{ business.costhbl_dest_status }}</td>
+        <td>{{ business.topaid_org_description }}</td>
+        <td>{{ business.topaid_org }}</td>
+        <td>{{ business.topaid_status }}</td>
+        <td>{{ business.toinvoice_dest_description }}</td>
+        <td>{{ business.toinvoice_dest }}</td>
+        <td>{{ business.toinvoice_dest_status }}</td>
+        <td>{{ business.profit }}</td>
+        <td>{{ business.hbl_canjeado_status }}</td>
+        <td>{{ business.devolution_ctrs_inidate }}</td>
+        <td>{{ business.devolution_ctrs_findate }}</td>
+        <td>{{ business.operation_status }}</td>
+        <td>{{ business.bl_type }}</td>
+        <td>{{ business.release_type }}</td>
       </tr>
-      <tr>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
+    {% endfor %}
+  <tr>
+
+        <td><input type="submit" value="Create One/新增"
+                       class="btn btn-primary pull-right" /></td>
+        <td></td>
+
       </tr>
     </tbody>
   </table>

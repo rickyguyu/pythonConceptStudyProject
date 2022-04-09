@@ -1,11 +1,5 @@
 from django.db import models
 
-
-class Userinfo(models.Model):
-    id = models.CharField(primary_key=True, max_length=20)
-    user_name = models.CharField(max_length=20, blank=True, null=True)
-    user_pwd = models.CharField(max_length=20, blank=True, null=True)
-
 class Businessinfo(models.Model):
     idbusinessinfo = models.AutoField(db_column='IdBusinessInfo', primary_key=True)  # Field name made lowercase.
     clientname = models.CharField(db_column='ClientName', max_length=45)  # Field name made lowercase.
@@ -55,3 +49,17 @@ class Businessinfo(models.Model):
     bl_type = models.CharField(db_column='BL_Type', max_length=3, blank=True, null=True)  # Field name made lowercase.
     release_type = models.CharField(db_column='Release_Type', max_length=45, blank=True,
                                     null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'businessinfo'
+
+
+class Userinfo(models.Model):
+    id = models.CharField(primary_key=True, max_length=20)
+    user_name = models.CharField(max_length=20, blank=True, null=True)
+    user_pwd = models.CharField(max_length=20, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'userinfo'

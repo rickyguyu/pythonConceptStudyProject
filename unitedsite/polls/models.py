@@ -8,7 +8,7 @@ class Userinfo(models.Model):
 
 class Businessinfo(models.Model):
     idbusinessinfo = models.AutoField(db_column='IdBusinessInfo', primary_key=True)  # Field name made lowercase.
-    clientname = models.CharField(db_column='ClientName', max_length=45)  # Field name made lowercase.
+    clientname = models.CharField(db_column='ClientName', max_length=45,blank=True, null=True)  # Field name made lowercase.
     week = models.CharField(db_column='Week', max_length=20, blank=True, null=True)  # Field name made lowercase.
     estimated_load_date = models.DateField(db_column='Estimated_Load_Date', blank=True,
                                            null=True)  # Field name made lowercase.
@@ -18,7 +18,7 @@ class Businessinfo(models.Model):
     vessel_voyage = models.CharField(db_column='Vessel_Voyage', max_length=45)  # Field name made lowercase.
     pol = models.CharField(db_column='POL', max_length=20)  # Field name made lowercase.
     pod = models.CharField(db_column='POD', max_length=20)  # Field name made lowercase.
-    businessinfocol = models.CharField(db_column='BusinessInfocol', max_length=45)  # Field name made lowercase.
+    businessinfocol = models.CharField(db_column='BusinessInfocol', max_length=200, blank=True, null=True)  # Field name made lowercase.
     numctrs = models.IntegerField(db_column='NumCtrs')  # Field name made lowercase.
     type_ctrs = models.CharField(db_column='Type_Ctrs', max_length=10)  # Field name made lowercase.
     booking_no = models.CharField(db_column='Booking_No', max_length=45)  # Field name made lowercase.
@@ -31,6 +31,8 @@ class Businessinfo(models.Model):
     freeddday = models.IntegerField(db_column='FreeDDday')  # Field name made lowercase.
     cost_org = models.FloatField(db_column='Cost_Org', blank=True, null=True)  # Field name made lowercase.
     sale_org = models.FloatField(db_column='Sale_Org', blank=True, null=True)  # Field name made lowercase.
+    set_org = models.FloatField(db_column='Set_Org', blank=True, null=True)  # Field name made lowercase.
+    local_org = models.FloatField(db_column='Local_Org', blank=True, null=True)  # Field name made lowercase.
     venta_dest = models.FloatField(db_column='Venta_Dest', blank=True, null=True)  # Field name made lowercase.
     costhbl_dest_description = models.CharField(db_column='CostHBL_Dest_Description', max_length=45, blank=True,
                                                 null=True)  # Field name made lowercase.

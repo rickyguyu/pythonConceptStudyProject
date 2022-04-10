@@ -79,9 +79,9 @@
            checkboxObj = document.getElementById(checkboxID);
            if (checkboxString =="YES"){
               document.getElementById(checkboxID).checked = true;
-           }else{
+           }
+           if (checkboxString =="NOT"){
               document.getElementById(checkboxID).checked = false;
-
            }
         }
 
@@ -288,11 +288,11 @@
                     <fieldset>
                         <legend>HBL Operation information(Pluscargo):</legend>
                         <label for="costhbl_dest_description">HBL Payment Detail/子单付款明细：</label>
-                        <input id="costhbl_dest_description" name="costhbl_dest_description" type="text"
+                        <input id="costhbl_dest_description" name="costhbl_dest_description" value="{{businessinfo.costhbl_dest_description}}" type="text"
                                class="form-control" placeholder="ej...90+125+102">
                         <br>
                         <label for="costhbl_dest">HBL Payment Amount/子单付款金额：</label>
-                        <input id="costhbl_dest" name="costhbl_dest" type="number" class="form-control"
+                        <input id="costhbl_dest" name="costhbl_dest" value="{{businessinfo.costhbl_dest}}"  type="number" class="form-control"
                                placeholder="ej...317">
                         <br>
                         <label for="costhbl_dest_status">* HBL Payment Status/子单付款状态：</label>
@@ -302,27 +302,35 @@
                         <label for="hbl_canjeado_status">* HBL Canjeado Status/换单状态：</label>
                         <input id="hbl_canjeado_status" name="hbl_canjeado_status" type="checkbox" value="YES"
                                class="form-control">
+                        <script>
+                               setCheckbox("costhbl_dest_status","{{businessinfo.costhbl_dest_status}}");
+                               setCheckbox("hbl_canjeado_status","{{businessinfo.hbl_canjeado_status}}");
+                        </script>
+
                     </fieldset>
                     <fieldset>
                         <legend>Management information(United Logistic Chile):</legend>
                         <label for="venta_dest">O.F.D.V/目的港运价：</label>
-                        <input id="venta_dest" name="venta_dest" type="number" class="form-control"
+                        <input id="venta_dest" name="venta_dest" value="{{businessinfo.venta_dest}}" type="number" class="form-control"
                                placeholder="ej...11100">
                         <br>
                         <label for="toinvoice_dest_description">Inv. Income Detail/发票价收款明细：</label>
-                        <input id="toinvoice_dest_description" name="toinvoice_dest_description" type="text"
+                        <input id="toinvoice_dest_description" name="toinvoice_dest_description" value="{{businessinfo.toinvoice_dest_description}}" type="text"
                                class="form-control" placeholder="ej...11100+370+300+125">
                         <br>
                         <label for="toinvoice_dest">Inv. Income Amount/发票价收款金额：</label>
-                        <input id="toinvoice_dest" name="toinvoice_dest" type="number" class="form-control"
+                        <input id="toinvoice_dest" name="toinvoice_dest" value="{{businessinfo.toinvoice_dest}}" type="number" class="form-control"
                                placeholder="ej...11895">
                         <br>
                         <label for="profit">Profit/毛利：</label>
-                        <input id="profit" name="profit" type="number" class="form-control" placeholder="ej...708">
+                        <input id="profit" name="profit" value="{{businessinfo.profit}}" type="number" class="form-control" placeholder="ej...708">
                         <br>
                         <label for="toinvoice_dest_status">* Inv. Income Status/发票价收款状态：</label>
                         <input id="toinvoice_dest_status" name="toinvoice_dest_status" type="checkbox" value="YES"
                                class="form-control">
+                        <script>
+                               setCheckbox("toinvoice_dest_status","{{businessinfo.toinvoice_dest_status}}");
+                        </script>
                     </fieldset>
                     <fieldset>
                         <legend>Operation Management information:</legend>
@@ -337,6 +345,11 @@
                         <label for="operation_status">* Status Finnish Op./操作是否已经完成：</label>
                         <input id="operation_status" name="operation_status" type="checkbox" value="YES"
                                class="form-control">
+                        <script>
+                               formatDate("devolution_ctrs_inidate","{{businessinfo.devolution_ctrs_inidate}}");
+                               formatDate("devolution_ctrs_findate","{{businessinfo.devolution_ctrs_findate}}");
+                               setCheckbox("operation_status","{{businessinfo.operation_status}}");
+                        </script>
                     </fieldset>
                 </td>
             </tbody>

@@ -48,11 +48,12 @@ def main_view(request):
 
 def new_business(request):
     userSelectUID= request.POST.get("userSelectBID", "")
-    if userSelectUID == "":
+    if userSelectUID == "": #新建
         return render(request, "newbusiness.html")
-    else:
-        print("mod ok")
-        return render(request, "modbusiness.html")
+    else: # 修改
+        businessinfo = Businessinfo.objects.get(idbusinessinfo=userSelectUID)
+        print("good:"+str(businessinfo.estimated_load_date))
+        return render(request, "modbusiness.html", {"businessinfo": businessinfo})
 
 def savebusiness(request):
     idbusinessinfo = request.POST.get("idbusinessinfo", "")

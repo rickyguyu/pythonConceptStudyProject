@@ -46,6 +46,46 @@
 
 
     </style>
+
+    <script>
+        function setSelected(selectID,value){
+            select = document.getElementById(selectID);
+                for (var i = 0; i < select.options.length; i++){
+                if (select.options[i].value == value){
+                    select.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+
+        function formatDate(dateID, dateString){
+            var d = new Date(dateString);
+            month = ''+ (d.getMonth()+1);
+            day = ''+d.getDate();
+            year= d.getFullYear();
+
+           if (month.length < 2){
+                  month = '0'+ month;
+           }
+           if (day.length < 2){
+                day = '0'+ day;
+           }
+           dateString1 = [year,month,day].join('-');
+           dateObj = document.getElementById(dateID);
+           dateObj.value=dateString1;
+        }
+
+        function setCheckbox(checkboxID, checkboxString){
+           checkboxObj = document.getElementById(checkboxID);
+           if (checkboxString =="YES"){
+              document.getElementById(checkboxID).checked = true;
+           }else{
+              document.getElementById(checkboxID).checked = false;
+
+           }
+        }
+
+   </script>
 </head>
 <body>
 
@@ -58,10 +98,14 @@
             <tr>
                 <td>
                     <fieldset>
-                        <legend>CREATE A BUSINESS:</legend>
-                        <input id="idbusinessinfo" name="idbusinessinfo" type="hidden" class="form-control">
+                        <legend>MODIFY A BUSINESS:</legend>
+                        <label for="idbusinessinfo">N°/编号：</label>
+                        <input readonly id="idbusinessinfo" name="idbusinessinfo"
+                               value="{{ businessinfo.idbusinessinfo }}"
+                               type="text" class="form-control">
+                        <br>
                         <label for="clientname">Client/客户：</label>
-                        <select id="clientname" name="clientname" class="form-control">
+                        <select id="clientname" name="clientname" class="form-control" >
                             <option value="" selected>Pls Select Clients</option>
                             <option value="亚美ASIAMERIC">亚美ASIAMERIC</option>
                             <option value="骏和WS CARGO">骏和WS CARGO</option>
@@ -72,9 +116,12 @@
                             <option value="宾泉国际WATGEN">宾泉国际WATGEN</option>
                             <option value="洪姐HONG">洪姐HONG</option>
                         </select>
+                        <script>
+                            setSelected("clientname","{{businessinfo.clientname}}");
+                        </script>
                         <br>
                         <label for="week">Week/周：</label>
-                        <input id="week" name="week" type="week" class="form-control">
+                        <input id="week" name="week" value="{{businessinfo.week}}" type="week" class="form-control">
                         <br>
                         <label for="estimated_load_date">ETL/预计装箱日期：</label>
                         <input id="estimated_load_date" name="estimated_load_date" type="date" class="form-control">
@@ -83,13 +130,20 @@
                         <input id="pre_etd" name="pre_etd" type="date" class="form-control">
                         <br>
                         <label for="etd">ETD Real/实际开船日期：</label>
-                        <input id="etd" name="etd" type="date" class="form-control">
+                        <input id="etd" name="etd"  type="date" class="form-control">
                         <br>
                         <label for="eta">ETA/预计到港日期：</label>
-                        <input id="eta" name="eta" type="date" class="form-control">
+                        <input id="eta" name="eta"  type="date" class="form-control">
+                        <script>
+                            formatDate("estimated_load_date","{{businessinfo.estimated_load_date}}");
+                            formatDate("pre_etd","{{businessinfo.pre_etd}}");
+                            formatDate("etd","{{businessinfo.etd}}");
+                            formatDate("eta","{{businessinfo.eta}}");
+                        </script>
                         <br>
                         <label for="vessel_voyage">Vessel Voyage/船名航次：</label>
-                        <input id="vessel_voyage" name="vessel_voyage" type="text" class="form-control" required> *
+                        <input id="vessel_voyage" name="vessel_voyage" value="{{ businessinfo.vessel_voyage }}"
+                               type="text" class="form-control" required> *
                         <br>
                         <label for="pol">POL/起运港：</label>
                         <select id="pol" name="pol" class="form-control" required>
@@ -105,35 +159,47 @@
                         </select> *
                         <br>
                         <label for="businessinfocol"> Note/备注：</label>
-                        <textarea id="businessinfocol" name="businessinfocol" class="form-control" rows="4" cols="30"
-                                  placeholder="Please Input Descriptions...">
-                    </textarea>
+                        <textarea id="businessinfocol" name="businessinfocol"
+                                  class="form-control" rows="4" cols="30" placeholder="Please Input Descriptions...">
+                        </textarea>
+                        <script>
+                            setSelected("pol","{{businessinfo.pol}}");
+                            setSelected("pod","{{businessinfo.pod}}");
+                            document.getElementById("businessinfocol").value = "{{businessinfo.businessinfocol}}";
+                        </script>
                         <br>
                         <label for="numctrs">Ctrs Numeber/箱量</label>
-                        <input id="numctrs" name="numctrs" type="number" class="form-control" size=2
+                        <input id="numctrs" name="numctrs" value="{{businessinfo.numctrs}}" type="number"
+                               class="form-control" size=2
                                placeholder="ej...1"
                                required> *
                         <br>
                         <label for="type_ctrs">Ctrs Type/箱型：</label>
-                        <select id="type_ctrs" name="type_ctrs" class="form-control" required>
+                        <select id="type_ctrs" name="type_ctrs" value="{{ businessinfo.type_ctrs }}"
+                                class="form-control" required>
                             <option value="" selected>Pls Select Ctrs-Type</option>
                             <option value="40HQ">40HQ</option>
                             <option value="40NR">40NR</option>
                             <option value="20GP">20GP</option>
                         </select> *
+                        <script>
+                            setSelected("type_ctrs","{{businessinfo.type_ctrs}}");
+                        </script>
                         <br>
                         <label for="booking_no">#Booking/订舱号：</label>
-                        <input id="booking_no" name="booking_no" type="text" class="form-control" required> *
+                        <input id="booking_no" name="booking_no" value="{{businessinfo.booking_no}}"
+                               type="text" class="form-control" required> *
                         <br>
                         <label for="master_no">#Master/主单号：</label>
-                        <input id="master_no" name="master_no" type="text" class="form-control">
+                        <input id="master_no" name="master_no" value="{{businessinfo.master_no}}" type="text"
+                               class="form-control">
                         <br>
                         <label for="num_hbls">Num HBL/子单数量(FCL/FCL):</label>
-                        <input id="num_hbls" name="num_hbls" type="number" class="form-control" size=2
+                        <input id="num_hbls" name="num_hbls" value="{{businessinfo.num_hbls}}" type="number" class="form-control" size=2
                                placeholder="ej...1">
                         <br>
                         <label for="container_no">Container/箱号：</label>
-                        <input id="container_no" name="container_no" type="text" class="form-control">
+                        <input id="container_no" name="container_no" value="{{businessinfo.container_no}}" type="text" class="form-control">
                         <br>
                         <label for="shipping_line">Line/船司：</label>
                         <select id="shipping_line" name="shipping_line" class="form-control" required>
@@ -149,7 +215,7 @@
                         </select> *
                         <br>
                         <label for="freeddday">Free D&D/免箱期：</label>
-                        <input id="freeddday" name="freeddday" type="number" class="form-control" placeholder="ej...14"
+                        <input id="freeddday" name="freeddday" value="{{businessinfo.freeddday}}" type="number" class="form-control" placeholder="ej...14"
                                required> *
                         <br>
                         <label for="bl_type">BL Type/提单类型：</label>
@@ -167,10 +233,14 @@
                             <option value="目的港打印Emision En Destino">目的港打印Emision En Destino</option>
                             <option value="Tele-Release">Tele-Release</option>
                         </select>
-
+                        <script>
+                            setSelected("shipping_line","{{businessinfo.shipping_line}}");
+                            setSelected("bl_type","{{businessinfo.bl_type}}");
+                            setSelected("release_type","{{businessinfo.release_type}}");
+                        </script>
                         <br>
                         <p align="right">
-                        <input type="submit" value="Create/保存" class="btn btn-primary pull-right"/>
+                            <input type="submit" value="Modify/保存" class="btn btn-primary pull-right"/>
                         </p>
                     </fieldset>
                 </td>
@@ -185,30 +255,34 @@
                     <fieldset>
                         <legend>Origen Operation information(China):</legend>
                         <label for="cost_org">O.F. Cost/成本运价：</label>
-                        <input id="cost_org" name="cost_org" type="number" class="form-control"
+                        <input id="cost_org" name="cost_org" value="{{businessinfo.cost_org}}" type="number" class="form-control"
                                placeholder="ej...10000">
                         <br>
                         <label for="sale_org">O.F. Sale/销售运价：</label>
-                        <input id="sale_org" name="sale_org" type="number" class="form-control"
+                        <input id="sale_org" name="sale_org" value="{{businessinfo.sale_org}}" type="number" class="form-control"
                                placeholder="ej...11000">
                         <br>
                         <label for="set_org">S.O.F. Cost Origin/结算运价：</label>
-                        <input id="set_org" name="set_org" type="number" class="form-control"
+                        <input id="set_org" name="set_org" value="{{businessinfo.set_org}}" type="number" class="form-control"
                                placeholder="ej...10500">
                         <br>
                         <label for="local_org">Local Cost Origin/起运港当地费用：</label>
-                        <input id="local_org" name="local_org" type="number" class="form-control"
+                        <input id="local_org" name="local_org" value="{{businessinfo.local_org}}" type="number" class="form-control"
                                placeholder="ej...370">
                         <br>
                         <label for="topaid_org_description">Deal Payment Detail/结算价付款明细：</label>
-                        <input id="topaid_org_description" name="topaid_org_description" type="text"
+                        <input id="topaid_org_description" name="topaid_org_description" value="{{businessinfo.topaid_org_description}}" type="text"
                                class="form-control" placeholder="ej...10500+370">
                         <br>
                         <label for="topaid_org">Deal Payment Amount/结算价付款金额：</label>
-                        <input id="topaid_org" name="topaid_org" type="number" class="form-control" placeholder="ej...10870">
+                        <input id="topaid_org" name="topaid_org" value="{{businessinfo.topaid_org}}" type="number" class="form-control"
+                               placeholder="ej...10870">
                         <br>
                         <label for="topaid_status">* Deal Payment Status/结算价付款状态：</label>
                         <input id="topaid_status" name="topaid_status" type="checkbox" value="YES" class="form-control">
+                        <script>
+                               setCheckbox("topaid_status","{{businessinfo.topaid_status}}");
+                        </script>
                     </fieldset>
 
                     <fieldset>
@@ -240,7 +314,8 @@
                                class="form-control" placeholder="ej...11100+370+300+125">
                         <br>
                         <label for="toinvoice_dest">Inv. Income Amount/发票价收款金额：</label>
-                        <input id="toinvoice_dest" name="toinvoice_dest" type="number" class="form-control" placeholder="ej...11895">
+                        <input id="toinvoice_dest" name="toinvoice_dest" type="number" class="form-control"
+                               placeholder="ej...11895">
                         <br>
                         <label for="profit">Profit/毛利：</label>
                         <input id="profit" name="profit" type="number" class="form-control" placeholder="ej...708">

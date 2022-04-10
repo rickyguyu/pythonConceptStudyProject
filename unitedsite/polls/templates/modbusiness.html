@@ -88,7 +88,13 @@
    </script>
 </head>
 <body>
-
+<form id="delbusiness-form" method="post" action="/polls/delbusiness/">
+    {% csrf_token %}
+    <input id="idbusinessfordelete" name="idbusinessfordelete" value="{{businessinfo.idbusinessinfo}}"
+                               type="hidden" class="form-control">
+     <input type="submit" value="Delete/删除" class="btn btn-primary pull-right"/>
+    <p></p>
+</form>
 <form id="newbusiness-form" method="post" action="/polls/savebusiness/">
     {% csrf_token %}
     <fieldset>
@@ -238,10 +244,10 @@
                             setSelected("bl_type","{{businessinfo.bl_type}}");
                             setSelected("release_type","{{businessinfo.release_type}}");
                         </script>
-                        <br>
-                        <p align="right">
+                        <p></p>
+                        <div align="right">
                             <input type="submit" value="Modify/保存" class="btn btn-primary pull-right"/>
-                        </p>
+                        </div>
                     </fieldset>
                 </td>
             </tr>

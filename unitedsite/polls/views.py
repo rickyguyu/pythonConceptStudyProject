@@ -52,7 +52,6 @@ def new_business(request):
         return render(request, "newbusiness.html")
     else: # 修改
         businessinfo = Businessinfo.objects.get(idbusinessinfo=userSelectUID)
-        print("good:"+str(businessinfo.estimated_load_date))
         return render(request, "modbusiness.html", {"businessinfo": businessinfo})
 
 def savebusiness(request):
@@ -221,3 +220,11 @@ def savebusiness(request):
         return render(request, "main.html", {"businessLists": businessinfos})
     else: # 必填数据为空
         return HttpResponse("请输入数据")
+
+def delbusiness(request):
+    idbusinessfordelete = request.POST.get("idbusinessfordelete", "")
+    if idbusinessfordelete:
+        businessinfo = Businessinfo.objects.get(idbusinessinfo=idbusinessfordelete)
+        businessinfo.delete()
+        businessinfos = Businessinfo.objects.order_by('idbusinessinfo')
+        return render(request, "main.html", {"businessLists": businessinfos})

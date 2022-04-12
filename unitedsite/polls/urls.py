@@ -1,5 +1,8 @@
 from django.urls import path
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
+
 urlpatterns = [
     path('', views.toLogin_view),
     path('login/', views.login_view),
@@ -9,4 +12,6 @@ urlpatterns = [
     path('newBusiness/', views.new_business),
     path('savebusiness/', views.savebusiness),
     path('delbusiness/', views.delbusiness),
-]
+
+] #+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+

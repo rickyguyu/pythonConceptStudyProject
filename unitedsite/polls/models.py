@@ -57,3 +57,16 @@ class Businessinfo(models.Model):
     bl_type = models.CharField(db_column='BL_Type', max_length=3, blank=True, null=True)  # Field name made lowercase.
     release_type = models.CharField(db_column='Release_Type', max_length=45, blank=True,
                                     null=True)  # Field name made lowercase.
+    mblfile = models.FileField(db_column='MBLFile', upload_to='MBLs-%Y%m/', blank=True, null=True) # Field name made lowercase.
+    hblfiles = models.FileField(db_column='HBLFiles', upload_to='HBLs-%Y%m/', blank=True,null=True)  # Field name made lowercase.
+
+    dp_voucher = models.FileField(db_column='DP_Voucher', upload_to='DPVs-%Y%m/', blank=True,null=True)  # Field name made lowercase.
+    dp_invoice = models.FileField(db_column='DP_Invoice', upload_to='DPIs-%Y%m/', blank=True,null=True)  # Field name made lowercase.
+    hp_voucher = models.FileField(db_column='HP_Voucher', upload_to='HPVs-%Y%m/', blank=True,null=True)  # Field name made lowercase.
+    hp_invoice = models.FileField(db_column='HP_Invoice', upload_to='HPIs-%Y%m/', blank=True, null=True)  # Field name made lowercase.
+    hbls_canjeados = models.FileField(db_column='HBLs_Canjeados', upload_to='HBLCNJDs-%Y%m/', blank=True, null=True)  # Field name made lowercase.
+
+    income_voucher = models.FileField(db_column='Income_Voucher', upload_to='INVs-%Y%m/', blank=True, null=True)  # Field name made lowercase.
+    income_invoice = models.FileField(db_column='Income_Invoice', upload_to='INI-%Y%m/', blank=True, null=True)  # Field name made lowercase.
+
+    hbls_firmados = models.FileField(db_column='HBLs_Firmados', upload_to='HBLCFRMDs-%Y%m/', blank=True,null=True)  # Field name made lowercase.

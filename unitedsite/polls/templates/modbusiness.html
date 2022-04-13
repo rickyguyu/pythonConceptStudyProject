@@ -147,6 +147,8 @@
                             <option value="宾泉国际龚总KANG KANG">宾泉国际龚总KANG KANG</option>
                             <option value="宾泉国际WATGEN">宾泉国际WATGEN</option>
                             <option value="洪姐HONG">洪姐HONG</option>
+                            <option value="OMAS">OMAS</option>
+                            <option value="YAO">YAO</option>
                         </select>
                         <script>
                             setSelected("clientname","{{businessinfo.clientname}}");
@@ -214,7 +216,7 @@
                                 class="form-control" required>
                             <option value="" selected>Pls Select Ctrs-Type</option>
                             <option value="40HQ">40HQ</option>
-                            <option value="40NR">40NR</option>
+                            <option value="40NR">40HR</option>
                             <option value="20GP">20GP</option>
                         </select> *
                         <script>
@@ -233,6 +235,13 @@
                         <label>MBL File/主单文件:</label>
                         <a HREF="{{MEDIA_URL}}{{businessinfo.mblfile}}" download="">{{businessinfo.mblfile}}</a>
                         <br>
+                        <label for="first_hbl_no">#First HBL/首子单号:</label>
+                        <input id="first_hbl_no" name="first_hbl_no" value="{{businessinfo.first_hbl_no}}" type="text" class="form-control">
+                        <br>
+                        <label for="hbl_memo">HBL MEMO/子单备注:</label>
+                        <input id="hbl_memo" name="hbl_memo" value="{{businessinfo.hbl_memo}}" type="text" class="form-control">
+                        <br>
+
                         <label for="num_hbls">Num HBL/子单数量(FCL/FCL):</label>
                         <input id="num_hbls" name="num_hbls" value="{{businessinfo.num_hbls}}" type="number"
                                class="form-control" size=2

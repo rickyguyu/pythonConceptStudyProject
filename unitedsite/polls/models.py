@@ -22,8 +22,9 @@ class Businessinfo(models.Model):
     numctrs = models.IntegerField(db_column='NumCtrs')  # Field name made lowercase.
     type_ctrs = models.CharField(db_column='Type_Ctrs', max_length=10)  # Field name made lowercase.
     booking_no = models.CharField(db_column='Booking_No', max_length=45)  # Field name made lowercase.
-    master_no = models.CharField(db_column='Master_No', max_length=45, blank=True,
-                                 null=True)  # Field name made lowercase.
+    master_no = models.CharField(db_column='Master_No', max_length=45, blank=True,null=True)  # Field name made lowercase.
+    first_hbl_no = models.CharField(db_column='First_Hbl_No', max_length=45,blank=True,null=True)  # Field name made lowercase.
+    hbl_memo = models.CharField(db_column='Hbl_Memo', max_length=45, blank=True,null=True)  # Field name made lowercase.
     num_hbls = models.IntegerField(db_column='Num_HBLs', blank=True, null=True)  # Field name made lowercase.
     container_no = models.CharField(db_column='Container_No', max_length=45, blank=True,
                                     null=True)  # Field name made lowercase.

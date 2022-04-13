@@ -1,10 +1,15 @@
+import datetime
 import random
 
+import xlwt
 from django.http import HttpResponse
 from django.shortcuts import render
+
+
 from .models import Businessinfo
 from .models import Userinfo
-
+from django.conf import settings
+from datetime import datetime
 
 # Create your views here.
 
@@ -77,6 +82,8 @@ def savebusiness(request):
     type_ctrs = request.POST.get("type_ctrs", "")
     booking_no = request.POST.get("booking_no", "")
     master_no = request.POST.get("master_no", "")
+    first_hbl_no = request.POST.get("first_hbl_no", "")
+    hbl_memo = request.POST.get("hbl_memo", "")
     num_hbls = request.POST.get("num_hbls", None)
     if num_hbls == "":
         num_hbls = None
@@ -154,6 +161,8 @@ def savebusiness(request):
             businessinfo.type_ctrs=type_ctrs
             businessinfo.booking_no=booking_no
             businessinfo.master_no=master_no
+            businessinfo.first_hbl_no = first_hbl_no
+            businessinfo.hbl_memo = hbl_memo
             businessinfo.num_hbls=num_hbls
             businessinfo.container_no=container_no
             businessinfo.shipping_line=shipping_line
@@ -218,6 +227,8 @@ def savebusiness(request):
                 type_ctrs=type_ctrs,
                 booking_no=booking_no,
                 master_no=master_no,
+                first_hbl_no = first_hbl_no,
+                hbl_memo = hbl_memo,
                 num_hbls=num_hbls,
                 container_no=container_no,
                 shipping_line=shipping_line,
@@ -268,3 +279,293 @@ def delbusiness(request):
         businessinfo.delete()
         businessinfos = Businessinfo.objects.order_by('idbusinessinfo')
         return render(request, "main.html", {"businessLists": businessinfos})
+
+def exportbusiness(request):
+    print(request.POST.get("smtExpOrigen",""))
+    print(request.POST.get("smtExpCompany",""))
+    response = HttpResponse(content_type='application/ms-excel')
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet("Export data")
+    row_num = 0
+
+    # 第一行格式
+    titleStyle = xlwt.Style.easyxf('pattern:pattern solid, fore_colour dark_blue;'
+                                   'align: vertical center, horizontal center;'
+                                   'font: bold true, colour white;'
+                                   )
+    dataStyle = xlwt.Style.easyxf('pattern:pattern solid, fore_colour white;'
+                                  'align: vertical center, horizontal center;'
+                                  'font: bold false, colour black;')
+
+    finishStyle = xlwt.Style.easyxf('pattern:pattern solid, fore_colour gray40;'
+                                    'align: vertical center, horizontal center;'
+                                    'font: bold false, colour black;')
+
+    titleStyle.font.name = "Times New Roman"
+    titleStyle.font.height = 220
+
+    dataStyle.font.name = "Times New Roman"
+    dataStyle.font.height = 180
+
+    finishStyle.font.name = "Times New Roman"
+    finishStyle.font.height = 180
+
+    borders = xlwt.Borders()
+    borders.left = 1
+    borders.right = 1
+    borders.top = 1
+    borders.bottom = 1
+    titleStyle.borders = borders
+    dataStyle.borders = borders
+    finishStyle.borders = borders
+
+
+
+
+    if request.POST.get("smtExpOrigen")!=None:
+        response['Content-Disposition'] = 'attachment; filename='+str(datetime.today().month)+'.'+\
+                                      str(datetime.today().day)+'Chile_Business_Table(Update_by_Chile).xls'
+        print("文件路径：" + str(datetime.today().month)+'.'+str(datetime.today().day)+
+              'Chile_Business_Table(Update_by_Chile).xls')
+
+        columns = ['ID', '客户', 'WEEK', 'ETD', '实际ETD',
+                   '预计装箱日期', '船名航次', '起始港', '目的港',
+                   '箱量', '箱型', '订舱号', '箱号', '船司', '免箱期',
+                   '运价成本', '卖价', '贵司成本', '付款状态', '备注信息 ']
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], titleStyle)
+
+        rows = Businessinfo.objects.values_list('idbusinessinfo',
+                                                'clientname',
+                                                'week',
+                                                'pre_etd',
+                                                'etd',
+                                                'estimated_load_date',
+                                                'vessel_voyage',
+                                                'pol',
+                                                'pod',
+                                                'numctrs',
+                                                'type_ctrs',
+                                                'booking_no',
+                                                'container_no',
+                                                'shipping_line',
+                                                'freeddday',
+                                                'cost_org',
+                                                'sale_org',
+                                                'set_org',
+                                                'topaid_status',
+                                                'businessinfocol')
+
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
+
+                if col_num == 0:
+                    ws.col(col_num).width = 1000
+                    dataStyle.num_format_str = "0"
+                    finishStyle.num_format_str = "0"
+                elif col_num == 1:
+                    ws.col(col_num).width = 5000
+                elif col_num == 2:
+                    ws.col(col_num).width = 2100
+                elif col_num == 3:
+                    ws.col(col_num).width = 2300
+                    dataStyle.num_format_str = "YYYY-MM-DD"
+                    finishStyle.num_format_str = "YYYY-MM-DD"
+                elif col_num == 4:
+                    ws.col(col_num).width = 2500
+                    dataStyle.num_format_str = "YYYY-MM-DD"
+                    finishStyle.num_format_str = "YYYY-MM-DD"
+                elif col_num == 5:
+                    ws.col(col_num).width = 3800
+                    dataStyle.num_format_str = "YYYY-MM-DD"
+                    finishStyle.num_format_str = "YYYY-MM-DD"
+                elif col_num == 6:
+                    ws.col(col_num).width = 5800
+                elif col_num == 7:
+                    ws.col(col_num).width = 3100
+                elif col_num == 8:
+                    ws.col(col_num).width = 3500
+                elif col_num == 9:
+                    ws.col(col_num).width = 1000
+                    dataStyle.num_format_str = "0"
+                    finishStyle.num_format_str = "0"
+                elif col_num == 10:
+                    ws.col(col_num).width = 1300
+                elif col_num == 11:
+                    ws.col(col_num).width = 4300
+                elif col_num == 12:
+                    ws.col(col_num).width = 3400
+                elif col_num == 13:
+                    ws.col(col_num).width = 1900
+                elif col_num == 14:
+                    ws.col(col_num).width = 2000
+                    dataStyle.num_format_str = "0"
+                elif col_num == 15:
+                    ws.col(col_num).width = 3500
+                    dataStyle.num_format_str = '[$US$] #,##0'
+                    finishStyle.num_format_str = "[$US$] #,##0"
+                elif col_num == 16:
+                    ws.col(col_num).width = 3500
+                    dataStyle.num_format_str = '[$US$] #,##0'
+                    finishStyle.num_format_str = "[$US$] #,##0"
+                elif col_num == 17:
+                    ws.col(col_num).width = 3500
+                    dataStyle.num_format_str = '[$US$] #,##0'
+                    finishStyle.num_format_str = "[$US$] #,##0"
+                elif col_num == 18:
+                    ws.col(col_num).width = 2600
+                else:
+                    ws.col(col_num).width = 5000
+                if row[18] == "NOT":
+                    ws.write(row_num, col_num, row[col_num], dataStyle)
+                else:
+                    ws.write(row_num, col_num, row[col_num], finishStyle)
+
+    elif request.POST.get("smtExpCompany")!=None:
+        titleStyle.font.height = 180
+        response['Content-Disposition'] = 'attachment; filename=' + str(datetime.today().month) + '.' + \
+                                          str(datetime.today().day) + 'Logistic_Chile_Contacto.xls'
+        print("文件路径：" + str(datetime.today().month) + '.' + str(datetime.today().day) +
+              'Logistic_Chile_Contacto.xls')
+
+        columns = ['ID#', 'Cliente', 'ETA(POD)','Vessel Voyage','POL','POD','C.Ctrs', 'T.Ctr',
+                   'Master#', 'HBL#(Booking#)','HBL Memo','C.HBLs', 'CTR#', 'Naviera',
+                   'Costo Chile Detalle', 'Costo Chile', 'Costo China Detalle','Costo China',
+                   'Venta Detalle', 'Venta','Margen Bruto','Costo Chile Pagado?','Costo China Pagado?',
+                   'Venta Recibido?','HBL Canjeado?','Tipo BL','Tipo Liberacion','Fecha Inicio Dvltn','Fecha Fin Dvltn','D&D Libre','Estado de Cierra (todo OK?)']
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], titleStyle)
+
+        rows = Businessinfo.objects.values_list('idbusinessinfo',
+                                                'clientname',
+                                                'eta',
+                                                'vessel_voyage',
+                                                'pol',
+                                                'pod',
+                                                'numctrs',
+                                                'type_ctrs',
+                                                'master_no',
+                                                'first_hbl_no',
+                                                'hbl_memo',
+                                                'num_hbls',
+                                                'container_no',
+                                                'shipping_line',
+
+                                                'costhbl_dest_description',
+                                                'costhbl_dest',
+                                                'topaid_org_description',
+                                                'topaid_org',
+                                                'toinvoice_dest_description',
+                                                'toinvoice_dest',
+                                                'profit',
+                                                'costhbl_dest_status',
+                                                'topaid_status',
+                                                'toinvoice_dest_status',
+                                                'hbl_canjeado_status',
+                                                'bl_type',
+                                                'release_type',
+                                                'devolution_ctrs_inidate',
+                                                'devolution_ctrs_findate',
+                                                'freeddday',
+                                                'operation_status')
+
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
+                if col_num == 0:
+                    ws.col(col_num).width = 1000
+                    dataStyle.num_format_str = "0"
+                    finishStyle.num_format_str = "0"
+                elif col_num == 1:
+                    ws.col(col_num).width = 5000
+                elif col_num == 2:
+                    ws.col(col_num).width = 2300
+                    dataStyle.num_format_str = "YYYY-MM-DD"
+                    finishStyle.num_format_str = "YYYY-MM-DD"
+                elif col_num == 3:
+                    ws.col(col_num).width = 5800
+                elif col_num == 4:
+                    ws.col(col_num).width = 3100
+                elif col_num == 5:
+                    ws.col(col_num).width = 3500
+                elif col_num == 6:
+                    ws.col(col_num).width = 1000
+                    dataStyle.num_format_str = "0"
+                    finishStyle.num_format_str = "0"
+                elif col_num == 7:
+                    ws.col(col_num).width = 1300
+                elif col_num == 8:
+                    ws.col(col_num).width = 4300
+                elif col_num == 9:
+                    ws.col(col_num).width = 4300
+                elif col_num == 10:
+                    ws.col(col_num).width = 4300
+                elif col_num == 11:
+                    ws.col(col_num).width = 1500
+                elif col_num == 12:
+                    ws.col(col_num).width = 3400
+                elif col_num == 13:
+                    ws.col(col_num).width = 1900
+
+                elif col_num == 14:
+                    ws.col(col_num).width = 4000
+                elif col_num == 15:
+                    ws.col(col_num).width = 3500
+                    dataStyle.num_format_str = '[$US$] #,##0'
+                    finishStyle.num_format_str = "[$US$] #,##0"
+                elif col_num == 16:
+                    ws.col(col_num).width = 4000
+                elif col_num == 17:
+                    ws.col(col_num).width = 3500
+                    dataStyle.num_format_str = '[$US$] #,##0'
+                    finishStyle.num_format_str = "[$US$] #,##0"
+                elif col_num == 18:
+                    ws.col(col_num).width = 4000
+                elif col_num == 19:
+                    ws.col(col_num).width = 3500
+                    dataStyle.num_format_str = '[$US$] #,##0'
+                    finishStyle.num_format_str = "[$US$] #,##0"
+                elif col_num == 20:
+                    ws.col(col_num).width = 3500
+                    dataStyle.num_format_str = '[$US$] #,##0'
+                    finishStyle.num_format_str = "[$US$] #,##0"
+                elif col_num == 21:
+                    ws.col(col_num).width = 2600
+                elif col_num == 22:
+                    ws.col(col_num).width = 2600
+                elif col_num == 23:
+                    ws.col(col_num).width = 2600
+                elif col_num == 24:
+                    ws.col(col_num).width = 2600
+
+                elif col_num == 25:
+                    ws.col(col_num).width = 2500
+                elif col_num == 26:
+                    ws.col(col_num).width = 5000
+
+                elif col_num == 27:
+                    ws.col(col_num).width = 2500
+                    dataStyle.num_format_str = "YYYY-MM-DD"
+                    finishStyle.num_format_str = "YYYY-MM-DD"
+                elif col_num == 28:
+                    ws.col(col_num).width = 2500
+                    dataStyle.num_format_str = "YYYY-MM-DD"
+                    finishStyle.num_format_str = "YYYY-MM-DD"
+                elif col_num == 29:
+                    ws.col(col_num).width = 2000
+                    dataStyle.num_format_str = "0"
+
+                elif col_num == 30:
+                    ws.col(col_num).width = 2600
+                else:
+                    ws.col(col_num).width = 5000
+                if row[30] == "NOT":
+                    ws.write(row_num, col_num, row[col_num], dataStyle)
+                else:
+                    ws.write(row_num, col_num, row[col_num], finishStyle)
+
+
+
+    wb.save(response)
+    return response

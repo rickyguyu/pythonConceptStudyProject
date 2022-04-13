@@ -1,9 +1,9 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>无标题文档</title>
- <style type="text/css">
+    <meta charset="utf-8">
+    <title>无标题文档</title>
+    <style type="text/css">
             /*表格样式*/
             table {
                 width: 90%;
@@ -44,112 +44,120 @@
                 color: #06f;
                 text-decoration: underline;
             }
-        </style>
+
+    </style>
 </head>
 
 <body>
 
-
-
 <form id="main-list" name="main-list" method="post" action="/polls/newBusiness/">
-{% csrf_token %}
-  <table >
-    <tbody>
-      <tr>
-          <th>N°</th>
-          <th>Client/客户</th>
-          <th>Week/周</th>
-          <th>ETL/预计装箱日期</th>
-          <th>ETD/预计开船日期</th>
-          <th>ETD Real/实际开船日期</th>
-          <th>ETA/预计到港日期</th>
-          <th>Vessel Voyage/船名航次</th>
-          <th>POL/起运港</th>
-          <th>POD/目的港</th>
-          <th>N,T de Ctrs/箱型箱量</th>
-          <th>#Booking/订舱号</th>
-          <th>#Master/主单号</th>
-          <th>Num HBL/子单数量</th>
-          <th>#Container/箱号</th>
-          <th>Line/船司</th>
-          <th>Free D&D/免箱期</th>
-          <th>O.F. Cost/成本运价</th>
-          <th>O.F. Sale/销售运价</th>
-          <th>S.O.F. Cost Origin/结算运价</th>
-          <th>Local Cost Origin/起运港当地费用</th>
-          <th>O.F.D.V/目的港运价</th>
-          <th>HBL Payment Detail/子单付款明细</th>
-          <th>HBL Payment Amount/子单付款金额</th>
-          <th>HBL Payment Status/子单付款状态</th>
-          <th>Deal Payment Detail/结算价付款明细</th>
-          <th>Deal Payment Amount/结算价付款金额</th>
-          <th>Deal Payment Status/结算价付款状态</th>
-          <th>Inv. Income Detail/发票价收款明细</th>
-          <th>Inv. Income Amount/发票价收款金额</th>
-          <th>Inv. Income Status/发票价收款状态</th>
-          <th>Profit/毛利</th>
-          <th>HBL Canjeado Status/换单状态</th>
-          <th>INI Devol_Ctrs/目的港提柜日期</th>
-          <th>END Devol_Ctrs/目的港还柜日期</th>
-          <th>Status Finnish Op./操作是否已经完成</th>
-          <th>BL Type/提单类型</th>
-          <th>Release Type/放单类型</th>
-      </tr>
-  <input id="userSelectBID" name="userSelectBID" value="" type="hidden" class="form-control">
-  {% for business in businessLists %}
-      <tr onclick={document.getElementById('userSelectBID').value={{business.idbusinessinfo}};document.forms[0].submit();}>
-        <td>{{ business.idbusinessinfo }}</td>
-        <td>{{ business.clientname }}</td>
-        <td>{{ business.week }}</td>
-        <td>{{ business.estimated_load_date }}</td>
-        <td>{{ business.pre_etd }}</td>
-        <td>{{ business.etd }}</td>
-        <td>{{ business.eta }}</td>
-        <td>{{ business.vessel_voyage }}</td>
-        <td>{{ business.pol }}</td>
-        <td>{{ business.pod }}</td>
-        <td>{{ business.numctrs }} X {{ business.type_ctrs }}</td>
-        <td>{{ business.booking_no }}</td>
-        <td>{{ business.master_no }}</td>
-        <td>{{ business.num_hbls }} x HBL FCL/FCL</td>
-        <td>{{ business.container_no }}</td>
-        <td>{{ business.shipping_line }}</td>
-        <td>{{ business.freeddday }}</td>
-        <td>{{ business.cost_org }}</td>
-        <td>{{ business.sale_org }}</td>
-        <td>{{ business.set_org }}</td>
-        <td>{{ business.local_org }}</td>
-        <td>{{ business.venta_dest }}</td>
-        <td>{{ business.costhbl_dest_description }}</td>
-        <td>{{ business.costhbl_dest }}</td>
-        <td>{{ business.costhbl_dest_status }}</td>
-        <td>{{ business.topaid_org_description }}</td>
-        <td>{{ business.topaid_org }}</td>
-        <td>{{ business.topaid_status }}</td>
-        <td>{{ business.toinvoice_dest_description }}</td>
-        <td>{{ business.toinvoice_dest }}</td>
-        <td>{{ business.toinvoice_dest_status }}</td>
-        <td>{{ business.profit }}</td>
-        <td>{{ business.hbl_canjeado_status }}</td>
-        <td>{{ business.devolution_ctrs_inidate }}</td>
-        <td>{{ business.devolution_ctrs_findate }}</td>
-        <td>{{ business.operation_status }}</td>
-        <td>{{ business.bl_type }}</td>
-        <td>{{ business.release_type }}</td>
-      </tr>
-    {% endfor %}
-  <tr>
+    {% csrf_token %}
+    <table>
+        <tbody>
+        <tr>
+            <th>N°</th>
+            <th>Client/客户</th>
+            <th>Week/周</th>
+            <th>ETL/预计装箱日期</th>
+            <th>ETD/预计开船日期</th>
+            <th>ETD Real/实际开船日期</th>
+            <th>ETA/预计到港日期</th>
+            <th>Vessel Voyage/船名航次</th>
+            <th>POL/起运港</th>
+            <th>POD/目的港</th>
+            <th>N,T de Ctrs/箱型箱量</th>
+            <th>#Booking/订舱号</th>
+            <th>#Master/主单号</th>
+            <th>#First HBL/首子单号</th>
+            <th>HBL MEMO/子单备注</th>
+            <th>Num HBL/子单数量</th>
+            <th>#Container/箱号</th>
+            <th>Line/船司</th>
+            <th>Free D&D/免箱期</th>
+            <th>O.F. Cost/成本运价</th>
+            <th>O.F. Sale/销售运价</th>
+            <th>S.O.F. Cost Origin/结算运价</th>
+            <th>Local Cost Origin/起运港当地费用</th>
+            <th>O.F.D.V/目的港运价</th>
+            <th>HBL Payment Detail/子单付款明细</th>
+            <th>HBL Payment Amount/子单付款金额</th>
+            <th>HBL Payment Status/子单付款状态</th>
+            <th>Deal Payment Detail/结算价付款明细</th>
+            <th>Deal Payment Amount/结算价付款金额</th>
+            <th>Deal Payment Status/结算价付款状态</th>
+            <th>Inv. Income Detail/发票价收款明细</th>
+            <th>Inv. Income Amount/发票价收款金额</th>
+            <th>Inv. Income Status/发票价收款状态</th>
+            <th>Profit/毛利</th>
+            <th>HBL Canjeado Status/换单状态</th>
+            <th>INI Devol_Ctrs/目的港提柜日期</th>
+            <th>END Devol_Ctrs/目的港还柜日期</th>
+            <th>Status Finnish Op./操作是否已经完成</th>
+            <th>BL Type/提单类型</th>
+            <th>Release Type/放单类型</th>
+        </tr>
+        <input id="userSelectBID" name="userSelectBID" value="" type="hidden" class="form-control">
+        {% for business in businessLists %}
+        <tr onclick={document.getElementById('userSelectBID').value={{business.idbusinessinfo}};document.forms[0].submit();}>
+            <td>{{ business.idbusinessinfo }}</td>
+            <td>{{ business.clientname }}</td>
+            <td>{{ business.week }}</td>
+            <td>{{ business.estimated_load_date }}</td>
+            <td>{{ business.pre_etd }}</td>
+            <td>{{ business.etd }}</td>
+            <td>{{ business.eta }}</td>
+            <td>{{ business.vessel_voyage }}</td>
+            <td>{{ business.pol }}</td>
+            <td>{{ business.pod }}</td>
+            <td>{{ business.numctrs }} X {{ business.type_ctrs }}</td>
+            <td>{{ business.booking_no }}</td>
+            <td>{{ business.master_no }}</td>
+            <td>{{ business.first_hbl_no }}</td>
+            <td>{{ business.hbl_memo }}</td>
+            <td>{{ business.num_hbls }} x HBL FCL/FCL</td>
+            <td>{{ business.container_no }}</td>
+            <td>{{ business.shipping_line }}</td>
+            <td>{{ business.freeddday }}</td>
+            <td>{{ business.cost_org }}</td>
+            <td>{{ business.sale_org }}</td>
+            <td>{{ business.set_org }}</td>
+            <td>{{ business.local_org }}</td>
+            <td>{{ business.venta_dest }}</td>
+            <td>{{ business.costhbl_dest_description }}</td>
+            <td>{{ business.costhbl_dest }}</td>
+            <td>{{ business.costhbl_dest_status }}</td>
+            <td>{{ business.topaid_org_description }}</td>
+            <td>{{ business.topaid_org }}</td>
+            <td>{{ business.topaid_status }}</td>
+            <td>{{ business.toinvoice_dest_description }}</td>
+            <td>{{ business.toinvoice_dest }}</td>
+            <td>{{ business.toinvoice_dest_status }}</td>
+            <td>{{ business.profit }}</td>
+            <td>{{ business.hbl_canjeado_status }}</td>
+            <td>{{ business.devolution_ctrs_inidate }}</td>
+            <td>{{ business.devolution_ctrs_findate }}</td>
+            <td>{{ business.operation_status }}</td>
+            <td>{{ business.bl_type }}</td>
+            <td>{{ business.release_type }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
 
-        <input type="submit" value="Create One/新增"
-                       class="btn btn-primary pull-right" />
+            <input type="submit" value="Create One/新增"
+                   class="btn btn-primary pull-right"/>
 
 
-      </tr>
-    </tbody>
-  </table>
-  <p>&nbsp;</p>
-  <p>&nbsp;</p>
-  <p>&nbsp;</p>
+        </tr>
+        </tbody>
+    </table>
+
 </form>
+<form id="export-form" name="export-form" method="post" action="/polls/export/">
+{% csrf_token %}
+    <input id="smtExpOrigen" name="smtExpOrigen" type="submit" value="Export Origen Data/起始港数据导出" class="btn btn-primary pull-right">
+    <input id="smtExpCompany" name="smtExpCompany" type="submit" value="Export Company Data/公司数据导出" class="btn btn-primary pull-right">
+
+</form>
+
 </body>
 </html>

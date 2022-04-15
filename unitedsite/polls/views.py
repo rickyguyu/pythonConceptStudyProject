@@ -23,7 +23,7 @@ def login_view(request):
     if u and p:
         c = Userinfo.objects.filter(user_name=u, user_pwd=p).count()
         if c == 1:
-            businessinfos = Businessinfo.objects.order_by('idbusinessinfo')
+            businessinfos = Businessinfo.objects.order_by('id')
             return render(request, "main.html", {"businessLists": businessinfos})
         else:
             return HttpResponse("用户名或密码错误")
@@ -47,7 +47,7 @@ def register_view(request):
 
 
 def main_view(request):
-    businessinfos = Businessinfo.objects.order_by('idbusinessinfo')
+    businessinfos = Businessinfo.objects.filter(operation_status="NO").order_by("id")
     return render(request, "main.html", {"businessLists": businessinfos})
 
 def new_business(request):
@@ -55,11 +55,11 @@ def new_business(request):
     if userSelectUID == "": #新建
         return render(request, "newbusiness.html")
     else: # 修改
-        businessinfo = Businessinfo.objects.get(idbusinessinfo=userSelectUID)
+        businessinfo = Businessinfo.objects.get(id=userSelectUID)
         return render(request, "modbusiness.html", {"businessinfo": businessinfo})
 
 def savebusiness(request):
-    idbusinessinfo = request.POST.get("idbusinessinfo", "")
+    id = request.POST.get("id", "")
     clientname = request.POST.get("clientname", "")
     week = request.POST.get("week", "")
     estimated_load_date = request.POST.get("estimated_load_date", None)
@@ -109,28 +109,28 @@ def savebusiness(request):
     costhbl_dest = request.POST.get("costhbl_dest", None)
     if costhbl_dest == "":
         costhbl_dest = None
-    costhbl_dest_status = request.POST.get("costhbl_dest_status", "NOT")
+    costhbl_dest_status = request.POST.get("costhbl_dest_status", "NO")
     topaid_org_description = request.POST.get("topaid_org_description", "")
     topaid_org = request.POST.get("topaid_org", None)
     if topaid_org == "":
         topaid_org = None
-    topaid_status = request.POST.get("topaid_status", "NOT")
+    topaid_status = request.POST.get("topaid_status", "NO")
     toinvoice_dest_description = request.POST.get("toinvoice_dest_description", "")
     toinvoice_dest = request.POST.get("toinvoice_dest", None)
     if toinvoice_dest == "":
         toinvoice_dest = None
-    toinvoice_dest_status = request.POST.get("toinvoice_dest_status", "NOT")
+    toinvoice_dest_status = request.POST.get("toinvoice_dest_status", "NO")
     profit = request.POST.get("profit", None)
     if profit == "":
         profit = None
-    hbl_canjeado_status = request.POST.get("hbl_canjeado_status", "NOT")
+    hbl_canjeado_status = request.POST.get("hbl_canjeado_status", "NO")
     devolution_ctrs_inidate = request.POST.get("devolution_ctrs_inidate", None)
     if devolution_ctrs_inidate == "":
         devolution_ctrs_inidate = None
     devolution_ctrs_findate = request.POST.get("devolution_ctrs_findate", None)
     if devolution_ctrs_findate == "":
         devolution_ctrs_findate = None
-    operation_status = request.POST.get("operation_status", "NOT")
+    operation_status = request.POST.get("operation_status", "NO")
     bl_type = request.POST.get("bl_type", "")
     release_type = request.POST.get("release_type", "")
     mblfile = request.FILES.get("mblfile", "")
@@ -145,8 +145,8 @@ def savebusiness(request):
     hbls_firmados = request.FILES.get("hbls_firmados", "")
     if vessel_voyage and pol and pod and numctrs and type_ctrs and booking_no and shipping_line and freeddday and \
     costhbl_dest_status and topaid_status and toinvoice_dest_status and hbl_canjeado_status and operation_status:
-        if idbusinessinfo: # 修改保存
-            businessinfo = Businessinfo.objects.get(idbusinessinfo = idbusinessinfo)
+        if id: # 修改保存
+            businessinfo = Businessinfo.objects.get(id = id)
             businessinfo.clientname=clientname
             businessinfo.week=week
             businessinfo.estimated_load_date=estimated_load_date
@@ -211,8 +211,9 @@ def savebusiness(request):
 
 
         else: # 新增保存
+            id = Businessinfo.objects.all().order_by("-id")[0].id+1
             businessinfo = Businessinfo( \
-                # idbusinessinfo = idbusinessinfo,
+                id = id,
                 clientname=clientname,
                 week=week,
                 estimated_load_date=estimated_load_date,
@@ -267,7 +268,7 @@ def savebusiness(request):
             )
 
         businessinfo.save()
-        businessinfos = Businessinfo.objects.order_by('idbusinessinfo')
+        businessinfos = Businessinfo.objects.order_by('id')
         return render(request, "main.html", {"businessLists": businessinfos})
     else: # 必填数据为空
         return HttpResponse("请输入数据")
@@ -275,9 +276,9 @@ def savebusiness(request):
 def delbusiness(request):
     idbusinessfordelete = request.POST.get("idbusinessfordelete", "")
     if idbusinessfordelete:
-        businessinfo = Businessinfo.objects.get(idbusinessinfo=idbusinessfordelete)
+        businessinfo = Businessinfo.objects.get(id=idbusinessfordelete)
         businessinfo.delete()
-        businessinfos = Businessinfo.objects.order_by('idbusinessinfo')
+        businessinfos = Businessinfo.objects.order_by('id')
         return render(request, "main.html", {"businessLists": businessinfos})
 
 def exportbusiness(request):
@@ -322,7 +323,7 @@ def exportbusiness(request):
 
 
 
-    if request.POST.get("smtExpOrigen")!=None:
+    if request.POST.get("smtExpOrigen")!=None: # 给客户公司
         response['Content-Disposition'] = 'attachment; filename='+str(datetime.today().month)+'.'+\
                                       str(datetime.today().day)+'Chile_Business_Table(Update_by_Chile).xls'
         print("文件路径：" + str(datetime.today().month)+'.'+str(datetime.today().day)+
@@ -335,7 +336,7 @@ def exportbusiness(request):
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], titleStyle)
 
-        rows = Businessinfo.objects.values_list('idbusinessinfo',
+        rows = Businessinfo.objects.values_list('id',
                                                 'clientname',
                                                 'week',
                                                 'pre_etd',
@@ -417,12 +418,12 @@ def exportbusiness(request):
                     ws.col(col_num).width = 2600
                 else:
                     ws.col(col_num).width = 5000
-                if row[18] == "NOT":
+                if row[18] == "NO":
                     ws.write(row_num, col_num, row[col_num], dataStyle)
                 else:
                     ws.write(row_num, col_num, row[col_num], finishStyle)
 
-    elif request.POST.get("smtExpCompany")!=None:
+    elif request.POST.get("smtExpCompany")!=None: # 自己公司
         titleStyle.font.height = 180
         response['Content-Disposition'] = 'attachment; filename=' + str(datetime.today().month) + '.' + \
                                           str(datetime.today().day) + 'Logistic_Chile_Contacto.xls'
@@ -437,7 +438,7 @@ def exportbusiness(request):
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], titleStyle)
 
-        rows = Businessinfo.objects.values_list('idbusinessinfo',
+        rows = Businessinfo.objects.values_list('id',
                                                 'clientname',
                                                 'eta',
                                                 'vessel_voyage',
@@ -555,17 +556,42 @@ def exportbusiness(request):
                 elif col_num == 29:
                     ws.col(col_num).width = 2000
                     dataStyle.num_format_str = "0"
-
+                    finishStyle.num_format_str = "0"
                 elif col_num == 30:
                     ws.col(col_num).width = 2600
                 else:
                     ws.col(col_num).width = 5000
-                if row[30] == "NOT":
+                if row[30] == "NO":
                     ws.write(row_num, col_num, row[col_num], dataStyle)
                 else:
                     ws.write(row_num, col_num, row[col_num], finishStyle)
 
-
-
     wb.save(response)
     return response
+
+def search(request):
+
+    finish_estado = request.POST.get("finish_estado","NO")
+    cond_Cliente = request.POST.get("cond_Cliente", "")
+
+    print("estado:"+finish_estado)
+    print("cond_Cliente:" + cond_Cliente)
+
+
+
+
+    if finish_estado=="YES" and cond_Cliente!="":
+        businessinfos = Businessinfo.objects.filter(clientname=cond_Cliente).order_by("id")
+
+
+    elif finish_estado=="YES" and cond_Cliente=="":
+        businessinfos = Businessinfo.objects.filter().order_by("id")
+    elif cond_Cliente!="" and finish_estado=="NO":
+        businessinfos = Businessinfo.objects.filter(operation_status=finish_estado,clientname=cond_Cliente).order_by("id")
+    else:
+        businessinfos = Businessinfo.objects.filter(operation_status="NO").order_by("id")
+    return render(request, "main.html", {"businessLists": businessinfos, "finish_estado": finish_estado, "cond_Cliente": cond_Cliente})
+
+
+def importbusiness(request):
+    return HttpResponse("ok")

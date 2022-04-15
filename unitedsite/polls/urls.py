@@ -13,6 +13,8 @@ urlpatterns = [
     path('savebusiness/', views.savebusiness),
     path('delbusiness/', views.delbusiness),
     path('export/', views.exportbusiness, name='export'),
+    path('import/', views.importbusiness, name='import'),
+    path('search/', views.search),
 
 ] #+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

@@ -81,7 +81,7 @@
            if (checkboxString =="YES"){
               document.getElementById(checkboxID).checked = true;
            }
-           if (checkboxString =="NOT"){
+           if (checkboxString =="NO"){
               document.getElementById(checkboxID).checked = false;
            }
         }
@@ -114,13 +114,13 @@
 <body>
 <form id="delbusiness-form" method="post" action="/polls/delbusiness/">
     {% csrf_token %}
-    <input id="idbusinessfordelete" name="idbusinessfordelete" value="{{businessinfo.idbusinessinfo}}"
+    <input id="idbusinessfordelete" name="idbusinessfordelete" value="{{businessinfo.id}}"
            type="hidden" class="form-control">
     <input type="submit" value="Delete/删除" class="btn btn-primary pull-right"/>
     <p></p>
 </form>
 <form id="newbusiness-form" method="post" action="/polls/savebusiness/" enctype="multipart/form-data">
-    <input id="userSelectBID" name="userSelectBID" value="{{businessinfo.idbusinessinfo}}"
+    <input id="userSelectBID" name="userSelectBID" value="{{businessinfo.id}}"
            type="hidden" class="form-control">
     {% csrf_token %}
     <fieldset>
@@ -131,9 +131,9 @@
                 <td>
                     <fieldset>
                         <legend>MODIFY A BUSINESS:</legend>
-                        <label for="idbusinessinfo">N°/编号：</label>
-                        <input readonly id="idbusinessinfo" name="idbusinessinfo"
-                               value="{{ businessinfo.idbusinessinfo }}"
+                        <label for="id">N°/编号：</label>
+                        <input readonly id="id" name="id"
+                               value="{{ businessinfo.id }}"
                                type="text" class="form-control">
                         <br>
                         <label for="clientname">Client/客户：</label>

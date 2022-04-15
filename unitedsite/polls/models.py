@@ -2,12 +2,12 @@ from django.db import models
 
 
 class Userinfo(models.Model):
-    id = models.CharField(primary_key=True, max_length=20)
+    id = models.CharField(primary_key=True, max_length=20,default=1)
     user_name = models.CharField(max_length=20, blank=True, null=True)
     user_pwd = models.CharField(max_length=20, blank=True, null=True)
 
 class Businessinfo(models.Model):
-    idbusinessinfo = models.AutoField(db_column='IdBusinessInfo', primary_key=True)  # Field name made lowercase.
+    id = models.IntegerField(db_column='id', primary_key=True )  # Field name made lowercase.
     clientname = models.CharField(db_column='ClientName', max_length=45,blank=True, null=True)  # Field name made lowercase.
     week = models.CharField(db_column='Week', max_length=20, blank=True, null=True)  # Field name made lowercase.
     estimated_load_date = models.DateField(db_column='Estimated_Load_Date', blank=True,

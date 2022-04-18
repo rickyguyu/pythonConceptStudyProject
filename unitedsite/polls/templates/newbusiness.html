@@ -46,6 +46,156 @@
 
 
     </style>
+    <script>
+        function calCostVentaOrigen(){
+            calCostLocal();
+            calCostHBLDestino();
+            var cost_org=document.getElementById("cost_org").value;
+            var sale_org=document.getElementById("sale_org").value;
+            document.getElementById("set_org").value = (parseFloat(sale_org)+parseFloat(cost_org))/2;
+            document.getElementById("topaid_org").value=parseFloat(document.getElementById("set_org").value)+parseFloat(document.getElementById("local_org").value);
+            document.getElementById("topaid_org_description").value = document.getElementById("set_org").value+"+"+document.getElementById("local_org").value;
+            document.getElementById("venta_dest").value = sale_org;
+            calVenta();
+        }
+        function calCostLocal(){
+            if (document.getElementById("clientname").value == "亚美ASIAMERIC"){
+                document.getElementById("local_org").value="370";
+            }else{
+                document.getElementById("local_org").value="0";
+            }
+        }
+        function calCostHBLDestino(){
+            if (document.getElementById("shipping_line").value=="MSC"){
+                document.getElementById("costhbl_dest_description").value="90+125+102";
+                document.getElementById("costhbl_dest").value=90+125+102;
+            }else if (document.getElementById("shipping_line").value=="MSK"){
+                document.getElementById("costhbl_dest_description").value="90+125+55";
+                document.getElementById("costhbl_dest").value=90+125+55;
+            }else if (document.getElementById("shipping_line").value=="YML"){
+                document.getElementById("costhbl_dest_description").value="90+142+120";
+                document.getElementById("costhbl_dest").value=90+142+120;
+            }else if (document.getElementById("shipping_line").value=="OOCL"){
+                document.getElementById("costhbl_dest_description").value="90+218+55";
+                document.getElementById("costhbl_dest").value=90+218+55;
+            }else if (document.getElementById("shipping_line").value=="CMA"){
+                document.getElementById("costhbl_dest_description").value="90+X+X";
+                document.getElementById("costhbl_dest").value="";
+            }else if (document.getElementById("shipping_line").value=="EMC"){
+                document.getElementById("costhbl_dest_description").value="90+X+X";
+                document.getElementById("costhbl_dest").value="";
+            }else{
+                document.getElementById("costhbl_dest_description").value="90+X+X";
+                document.getElementById("costhbl_dest").value="";
+            }
+        }
+
+
+        function calVenta(){
+            addi_cost=0;
+            if (document.getElementById("clientname").value=="亚美ASIAMERIC"){
+                document.getElementById("toinvoice_dest_description").value =document.getElementById("venta_dest").value+"+370";
+                document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("venta_dest").value)+370;
+            }else{
+                document.getElementById("toinvoice_dest_description").value=document.getElementById("venta_dest").value;
+                document.getElementById("toinvoice_dest").value = document.getElementById("venta_dest").value;
+            }
+
+            if (document.getElementById("shipping_line").value=="MSC"){
+                document.getElementById("toinvoice_dest_description").value +="+300+125";
+                document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+300+125;
+                if (document.getElementById("clientname").value=="骏和WS CARGO" && parseFloat(document.getElementById("num_hbls").value)>10){
+                    addi_cost=(parseFloat(document.getElementById("num_hbls").value)-10)*25;
+                    document.getElementById("toinvoice_dest_description").value +="+"+String(addi_cost);
+                    document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+addi_cost;
+                }else if (document.getElementById("clientname").value=="骏和WS CARGO" && document.getElementById("num_hbls").value==""){
+                    document.getElementById("toinvoice_dest_description").value +="+"+"X";
+                    document.getElementById("toinvoice_dest").value="";
+                }else{;}
+            }else if (document.getElementById("shipping_line").value=="MSK"){
+                document.getElementById("toinvoice_dest_description").value +="+300+125";
+                document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+300+125;
+                if (document.getElementById("clientname").value=="骏和WS CARGO" && parseFloat(document.getElementById("num_hbls").value)>10){
+                    addi_cost=(parseFloat(document.getElementById("num_hbls").value)-10)*25;
+                    document.getElementById("toinvoice_dest_description").value +="+"+String(addi_cost);
+                    document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+addi_cost;
+                }else if (document.getElementById("clientname").value=="骏和WS CARGO" && document.getElementById("num_hbls").value==""){
+                    document.getElementById("toinvoice_dest_description").value +="+X";
+                    document.getElementById("toinvoice_dest").value="";
+                }else{;}
+            }else if (document.getElementById("shipping_line").value=="YML"){
+                document.getElementById("toinvoice_dest_description").value +="+300+142";
+                document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+300+142;
+                if (document.getElementById("clientname").value=="骏和WS CARGO" && parseFloat(document.getElementById("num_hbls").value)>10){
+                    addi_cost=(parseFloat(document.getElementById("num_hbls").value)-10)*25;
+                    document.getElementById("toinvoice_dest_description").value +="+"+String(addi_cost);
+                    document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+addi_cost;
+                }else if (document.getElementById("clientname").value=="骏和WS CARGO" && document.getElementById("num_hbls").value==""){
+                    document.getElementById("toinvoice_dest_description").value +="+X";
+                    document.getElementById("toinvoice_dest").value="";
+                }else{;}
+            }else if (document.getElementById("shipping_line").value=="OOCL"){
+                document.getElementById("toinvoice_dest_description").value +="+300+125+85";
+                document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+300+125+85;
+                if (document.getElementById("clientname").value=="骏和WS CARGO" && parseFloat(document.getElementById("num_hbls").value)>10){
+                    addi_cost=(parseFloat(document.getElementById("num_hbls").value)-10)*25;
+                    document.getElementById("toinvoice_dest_description").value +="+"+String(addi_cost);
+                    document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+addi_cost;
+                }else if (document.getElementById("clientname").value=="骏和WS CARGO" && document.getElementById("num_hbls").value==""){
+                    document.getElementById("toinvoice_dest_description").value +="+X";
+                    document.getElementById("toinvoice_dest").value="";
+                }else{;}
+            }else if (document.getElementById("shipping_line").value=="CMA"){
+                document.getElementById("toinvoice_dest_description").value +="+300+125";
+                document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+300+125;
+                if (document.getElementById("clientname").value=="骏和WS CARGO" && parseFloat(document.getElementById("num_hbls").value)>10){
+                    addi_cost=(parseFloat(document.getElementById("num_hbls").value)-10)*25;
+                    document.getElementById("toinvoice_dest_description").value +="+"+String(addi_cost);
+                    document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+addi_cost;
+                }else if (document.getElementById("clientname").value=="骏和WS CARGO" && document.getElementById("num_hbls").value==""){
+                    document.getElementById("toinvoice_dest_description").value +="+X";
+                    document.getElementById("toinvoice_dest").value="";
+                }else{;}
+            }else if (document.getElementById("shipping_line").value=="EMC"){
+                document.getElementById("toinvoice_dest_description").value +="+300+125";
+                document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+300+125;
+                if (document.getElementById("clientname").value=="骏和WS CARGO" && parseFloat(document.getElementById("num_hbls").value)>10){
+                    addi_cost=(parseFloat(document.getElementById("num_hbls").value)-10)*25;
+                    document.getElementById("toinvoice_dest_description").value +="+"+String(addi_cost);
+                    document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+addi_cost;
+                }else if (document.getElementById("clientname").value=="骏和WS CARGO" && document.getElementById("num_hbls").value==""){
+                    document.getElementById("toinvoice_dest_description").value +="+X";
+                    document.getElementById("toinvoice_dest").value="";
+                }else{;}
+            }else{
+                document.getElementById("toinvoice_dest_description").value +="+300+125";
+                document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+300+125;
+                if (document.getElementById("clientname").value=="骏和WS CARGO" && parseFloat(document.getElementById("num_hbls").value)>10){
+                    addi_cost=(parseFloat(document.getElementById("num_hbls").value)-10)*25;
+                    document.getElementById("toinvoice_dest_description").value +="+"+String(addi_cost);
+                    document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+addi_cost;
+                }else if (document.getElementById("clientname").value=="骏和WS CARGO" && document.getElementById("num_hbls").value==""){
+                    document.getElementById("toinvoice_dest_description").value +="+X";
+                    document.getElementById("toinvoice_dest").value="";
+                }else{;}
+            }
+            document.getElementById("profit").value = parseFloat(document.getElementById("toinvoice_dest").value)-parseFloat(document.getElementById("costhbl_dest").value)-parseFloat(document.getElementById("topaid_org").value);
+
+        }
+
+        function calCostVentaDestino(){
+            //calCostLocal();
+            //calCostHBLDestino();
+            var cost_org=document.getElementById("cost_org").value;
+            var sale_org=document.getElementById("sale_org").value;
+            document.getElementById("set_org").value = (parseFloat(sale_org)+parseFloat(cost_org))/2;
+            document.getElementById("topaid_org").value=parseFloat(document.getElementById("set_org").value)+parseFloat(document.getElementById("local_org").value);
+            document.getElementById("topaid_org_description").value = document.getElementById("set_org").value+"+"+document.getElementById("local_org").value;
+            //document.getElementById("venta_dest").value = document.getElementById("sale_org").value;
+            calVenta();
+        }
+
+    </script>
 </head>
 <body>
 
@@ -61,7 +211,7 @@
                         <legend>CREATE A BUSINESS:</legend>
                         <input id="id" name="id" type="hidden" class="form-control">
                         <label for="clientname">Client/客户：</label>
-                        <select id="clientname" name="clientname" class="form-control">
+                        <select id="clientname" name="clientname" class="form-control" onchange={calCostLocal();}>
                             <option value="" selected>Pls Select Clients</option>
                             <option value="亚美ASIAMERIC">亚美ASIAMERIC</option>
                             <option value="骏和WS CARGO">骏和WS CARGO</option>
@@ -136,13 +286,13 @@
                         <br>
                         <label for="num_hbls">Num HBL/子单数量(FCL/FCL):</label>
                         <input id="num_hbls" name="num_hbls" type="number" class="form-control" size=2
-                               placeholder="ej...1">
+                               placeholder="ej...1" onchange={calCostVentaDestino();}>
                         <br>
                         <label for="container_no">Container/箱号：</label>
                         <input id="container_no" name="container_no" type="text" class="form-control">
                         <br>
                         <label for="shipping_line">Line/船司：</label>
-                        <select id="shipping_line" name="shipping_line" class="form-control" required>
+                        <select id="shipping_line" name="shipping_line" class="form-control" required onchange={calCostHBLDestino();}>
                             <option value="" selected>Pls Select Ocean Lines</option>
                             <option value="MSC">MSC</option>
                             <option value="CMA">CMA</option>
@@ -151,6 +301,7 @@
                             <option value="COSCO">COSCO</option>
                             <option value="OOCL">OOCL</option>
                             <option value="ONE">ONE</option>
+                            <option value="YML">YML</option>
                             <option value="HPL">HPL</option>
                         </select> *
                         <br>
@@ -192,26 +343,26 @@
                         <legend>Origen Operation information(China):</legend>
                         <label for="cost_org">O.F. Cost/成本运价：</label>
                         <input id="cost_org" name="cost_org" type="number" class="form-control"
-                               placeholder="ej...10000">
+                               placeholder="ej...10000" onclick={calCostVentaDestino();} onchange={calCostVentaDestino();}>
                         <br>
                         <label for="sale_org">O.F. Sale/销售运价：</label>
                         <input id="sale_org" name="sale_org" type="number" class="form-control"
-                               placeholder="ej...11000">
+                               placeholder="ej...11000" onclick={calCostVentaDestino();} onchange={calCostVentaDestino();}>
                         <br>
                         <label for="set_org">S.O.F. Cost Origin/结算运价：</label>
                         <input id="set_org" name="set_org" type="number" class="form-control"
-                               placeholder="ej...10500">
+                               placeholder="ej...10500" readonly>
                         <br>
                         <label for="local_org">Local Cost Origin/起运港当地费用：</label>
                         <input id="local_org" name="local_org" type="number" class="form-control"
-                               placeholder="ej...370">
+                               placeholder="ej...370" onchange={calCostVentaDestino();}>
                         <br>
                         <label for="topaid_org_description">Deal Payment Detail/结算价付款明细：</label>
                         <input id="topaid_org_description" name="topaid_org_description" type="text"
-                               class="form-control" placeholder="ej...10500+370">
+                               class="form-control" placeholder="ej...10500+370" readonly>
                         <br>
                         <label for="topaid_org">Deal Payment Amount/结算价付款金额：</label>
-                        <input id="topaid_org" name="topaid_org" type="number" class="form-control" placeholder="ej...10870">
+                        <input id="topaid_org" name="topaid_org" type="number" class="form-control" placeholder="ej...10870" readonly>
                         <br>
                         <label for="topaid_status">* Deal Payment Status/结算价付款状态：</label>
                         <input id="topaid_status" name="topaid_status" type="checkbox" value="YES" class="form-control">
@@ -221,11 +372,11 @@
                         <legend>HBL Operation information(Pluscargo):</legend>
                         <label for="costhbl_dest_description">HBL Payment Detail/子单付款明细：</label>
                         <input id="costhbl_dest_description" name="costhbl_dest_description" type="text"
-                               class="form-control" placeholder="ej...90+125+102">
+                               class="form-control" placeholder="ej...90+125+102" >
                         <br>
                         <label for="costhbl_dest">HBL Payment Amount/子单付款金额：</label>
                         <input id="costhbl_dest" name="costhbl_dest" type="number" class="form-control"
-                               placeholder="ej...317">
+                               placeholder="ej...317" onchange={calCostVentaDestino();}>
                         <br>
                         <label for="costhbl_dest_status">* HBL Payment Status/子单付款状态：</label>
                         <input id="costhbl_dest_status" name="costhbl_dest_status" type="checkbox" value="YES"
@@ -239,17 +390,18 @@
                         <legend>Management information(United Logistic Chile):</legend>
                         <label for="venta_dest">O.F.D.V/目的港运价：</label>
                         <input id="venta_dest" name="venta_dest" type="number" class="form-control"
-                               placeholder="ej...11100">
+                               placeholder="ej...11100" onclick={document.getElementById("venta_dest").value=document.getElementById("sale_org").value;calCostVentaDestino();}
+                               onchange={calCostVentaDestino();}>
                         <br>
                         <label for="toinvoice_dest_description">Inv. Income Detail/发票价收款明细：</label>
                         <input id="toinvoice_dest_description" name="toinvoice_dest_description" type="text"
-                               class="form-control" placeholder="ej...11100+370+300+125">
+                               class="form-control" placeholder="ej...11100+370+300+125" readonly>
                         <br>
                         <label for="toinvoice_dest">Inv. Income Amount/发票价收款金额：</label>
-                        <input id="toinvoice_dest" name="toinvoice_dest" type="number" class="form-control" placeholder="ej...11895">
+                        <input id="toinvoice_dest" name="toinvoice_dest" type="number" class="form-control" placeholder="ej...11895" readonly>
                         <br>
                         <label for="profit">Profit/毛利：</label>
-                        <input id="profit" name="profit" type="number" class="form-control" placeholder="ej...708">
+                        <input id="profit" name="profit" type="number" class="form-control" placeholder="ej...708" readonly>
                         <br>
                         <label for="toinvoice_dest_status">* Inv. Income Status/发票价收款状态：</label>
                         <input id="toinvoice_dest_status" name="toinvoice_dest_status" type="checkbox" value="YES"

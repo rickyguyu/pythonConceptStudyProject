@@ -2,14 +2,22 @@ import datetime
 import random
 
 import xlwt
+from django.contrib.auth.decorators import login_required
+from openpyxl import load_workbook
+from openpyxl.drawing.image import Image
 from django.http import HttpResponse
 from django.shortcuts import render
 
 
-from .models import Businessinfo
+from .models import Businessinfo, ClienteInfo
 from .models import Userinfo
 from django.conf import settings
 from datetime import datetime
+from datetime import timedelta
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.base import View
+
 
 # Create your views here.
 
@@ -46,6 +54,10 @@ def register_view(request):
         return HttpResponse("请输入用户名和密码")
 
 
+#def email_check(user):
+#    return user.email.endswith('@unitedlogdom.com')
+#@user_passes_test(email_check)
+@login_required()
 def main_view(request):
     businessinfos = Businessinfo.objects.filter(operation_status="NO").order_by("id")
     return render(request, "main.html", {"businessLists": businessinfos})
@@ -268,7 +280,7 @@ def savebusiness(request):
             )
 
         businessinfo.save()
-        businessinfos = Businessinfo.objects.order_by('id')
+        businessinfos = Businessinfo.objects.filter(operation_status="NO").order_by("id")
         return render(request, "main.html", {"businessLists": businessinfos})
     else: # 必填数据为空
         return HttpResponse("请输入数据")
@@ -278,8 +290,110 @@ def delbusiness(request):
     if idbusinessfordelete:
         businessinfo = Businessinfo.objects.get(id=idbusinessfordelete)
         businessinfo.delete()
-        businessinfos = Businessinfo.objects.order_by('id')
+        businessinfos = Businessinfo.objects.filter(operation_status="NO").order_by("id")
         return render(request, "main.html", {"businessLists": businessinfos})
+
+def prealerta(request):
+    idbusinessforprealerta = request.POST.get("idbusinessforprealerta", "")
+    businessinfo = Businessinfo.objects.get(id=idbusinessforprealerta)
+    clienteInfo = ClienteInfo.objects.get(id=businessinfo.clientname)
+    clientename=clienteInfo.clientname
+    container_no=Businessinfo.objects.get(id=idbusinessforprealerta).container_no;
+
+
+    deta=datetime.strptime(str(businessinfo.eta),"%Y-%m-%d")
+    deta1=timedelta(days=-14)
+    dateline=deta+deta1
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    # response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename='+ str(datetime.today().month)+'.'+str(datetime.today().day)+"-"+clientename+"-"+container_no+'-prealerta.xlsx'
+
+    wb = load_workbook(filename="."+settings.STATIC_URL+"Template/tPreAlerta.xlsx") #, read_only=True
+    sheet = wb.get_sheet_by_name("PRE-PAYMENT-ALERT")
+    img= Image("."+settings.STATIC_URL+"img/logo.png")
+    newsize=(145,32)
+    img.width, img.height = newsize
+    sheet.add_image(img,"B4")
+    sheet["C12"] = clienteInfo.clientname
+    sheet["C13"] = clienteInfo.clientrut
+    sheet["C14"] = clienteInfo.clientgiro
+    sheet["C15"] = clienteInfo.clientaddress
+    sheet["C16"] = clienteInfo.clientstate
+    sheet["F16"] = clienteInfo.clientcity
+    sheet["C17"] = clienteInfo.clientcontact
+    sheet["I12"] = str(datetime.today().date())
+
+    sheet["D22"] ="Flete Maritimo "+ businessinfo.shipping_line+ " Line " + str(businessinfo.numctrs) +"X"+ businessinfo.type_ctrs
+    pricesList=businessinfo.toinvoice_dest_description.split("+")
+    i=0
+    totalprice = 0
+    for i in range(len(pricesList)):
+        if (i==0):
+            sheet["B23"] = businessinfo.numctrs
+            sheet["C23"] = "Ctr"
+            sheet["D23"] = "BL " + businessinfo.booking_no + " / CTR: " + businessinfo.container_no
+            sheet["D24"] = businessinfo.vessel_voyage
+            sheet["D25"] = businessinfo.pol + " - " + businessinfo.pod
+            sheet["H23"] = float(pricesList[0])
+            sheet["I23"] = sheet["H23"].value
+            totalprice +=float(pricesList[0])
+        elif (i==1):
+            sheet["B27"] = businessinfo.numctrs
+            sheet["C27"] = "Ctr"
+            sheet["D27"] = "Logistics Services HBL:"
+            sheet["D28"] = "Handling + Apertura + Emision BL + Carta de Responsabilidad"
+            sheet["H27"] = float(pricesList[1])
+            sheet["I27"] = sheet["H27"].value
+            totalprice += float(pricesList[1])
+        elif (i == 2):
+            sheet["B29"] = businessinfo.numctrs
+            sheet["C29"] = "Ctr"
+            sheet["D29"] = "DTHC"
+            sheet["H29"] = float(pricesList[2])
+            sheet["I29"] = sheet["H29"].value
+            totalprice += float(pricesList[2])
+        elif (i == 3):
+            sheet["B30"] = businessinfo.numctrs
+            sheet["C30"] = "Ctr"
+            sheet["D30"] = "EXTRA HBL"
+            sheet["H30"] = float(pricesList[3])
+            sheet["I30"] = sheet["H30"].value
+            totalprice += float(pricesList[3])
+        else:
+            print("Have more prices...")
+            totalprice += float(pricesList[i])
+
+
+        i += 1
+
+    sheet["D32"]="Amount payable US$ "+ str(totalprice.__round__(0))
+    sheet["D33"] = "Please pay our dollar account below"
+
+    sheet["D35"] = "Payment should be executed 2 weeks before ETA :"+ str(dateline.date()) + "."
+
+    sheet["B39"] = "美元(大写)金额: "
+    sheet["D39"] = totalprice
+
+    sheet["I38"]= totalprice
+    sheet["I42"] = totalprice
+
+    sheet["C50"] = "RICKY GU"
+    sheet["C51"] = "+56 9 551 944 08"
+    sheet["C52"] = str(datetime.today().date())
+
+    sheet["F50"] = "p.p. US Unnited Logistic CHile SpA"
+
+
+
+    #h1= sheet.cell(row=6 ,column=8).value
+
+    h1 = sheet.cell(row=13, column=3).value
+    print("#Prealterta:"+str(h1))
+
+    wb.save(response)
+    return response
+    #return HttpResponse("PreAlerta generado!")
 
 def exportbusiness(request):
     print(request.POST.get("smtExpOrigen",""))
@@ -595,3 +709,17 @@ def search(request):
 
 def importbusiness(request):
     return HttpResponse("ok")
+
+def profile(request):
+    return HttpResponse("ok")
+
+# 此类中的函数只能在登录后使用
+'''
+class AuthedView(LoginRequiredMixin,View):
+    login_url = '/accounts/login/'
+    #测试用户每个权限
+    def test_func(self):
+        return self.request.user.email.endswith('@unitedlogdom.com')
+    def profile(request):
+        return return HttpResponse("ok")
+'''

@@ -48,6 +48,9 @@ INSTALLED_APPS = [
 MEDIA_URL = 'upload/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'upload').replace("\\","/")
 # http://127.0.0.1:8000/polls/upload/.../MBL1234TEST5678.pdf
+LOGIN_REDIRECT_URL ='/polls/profile/'
+LOGOUT_REDIRECT_URL ='/accounts/login/'
+LOGIN_URL='/accounts/login/'
 
 
 MIDDLEWARE = [

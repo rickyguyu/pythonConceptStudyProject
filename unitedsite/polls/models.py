@@ -71,3 +71,13 @@ class Businessinfo(models.Model):
     income_invoice = models.FileField(db_column='Income_Invoice', upload_to='INI-%Y%m/', blank=True, null=True)  # Field name made lowercase.
 
     hbls_firmados = models.FileField(db_column='HBLs_Firmados', upload_to='HBLCFRMDs-%Y%m/', blank=True,null=True)  # Field name made lowercase.
+
+class ClienteInfo(models.Model):
+    id = models.CharField(db_column='id', max_length=45, primary_key=True)
+    clientname = models.CharField(db_column='ClientName', max_length=45)
+    clientrut = models.CharField(db_column='ClientRut', max_length=20)
+    clientgiro = models.CharField(db_column='ClientGiro', max_length=200)
+    clientaddress = models.CharField(db_column='ClientAddress', max_length=200)
+    clientcity = models.CharField(db_column='ClientCity', max_length=45)
+    clientstate = models.CharField(db_column='ClientState', max_length=45)
+    clientcontact = models.CharField(db_column='ClientContact', max_length=45)

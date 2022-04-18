@@ -15,6 +15,9 @@ urlpatterns = [
     path('export/', views.exportbusiness, name='export'),
     path('import/', views.importbusiness, name='import'),
     path('search/', views.search),
+    path('prealerta/', views.prealerta),
+    path('profile/', views.profile)
+
 
 ] #+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

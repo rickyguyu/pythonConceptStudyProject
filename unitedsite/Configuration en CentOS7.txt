@@ -1,0 +1,49 @@
+打开 关闭 Firewall
+
+sudo firewall-cmd --permanent --add-service=mysql
+sudo firewall-cmd --permanent --remove-service=mysql
+
+sudo firewall-cmd --zone=public --add-port=80/tcp --permanent
+sudo firewall-cmd --zone=public --remove-port=80/tcp --permanent
+
+sudo firewall-cmd --reload
+or
+
+
+
+开机启动 Mysql：
+sudo systemctl enable mysqld # 已经完成
+
+重启 Mysql：
+sudo systemctl restart mysqld
+查看Mysql状态：
+systemctl status mysqld
+
+
+
+MySQL 设置文件： sudo vi /etc/my.cnf
+[mysqld]
+# skip-grant-tables 跳过权限
+validate_password.policy = LOW  # 密码简化设置
+# bind-address=127.0.0.1 #只有当前地址可以访问
+bind-address=0.0.0.0 #默认设置，所有地址可以远程访问
+
+MySQL本地访问：
+mysql -u root -p
+password:ricky001
+
+create database ulc_DB default character set utf8 collate utf8_general_ci; # 创建数据库
+create user 'ricky'@'%' identified by 'ricky001'; # 创建用户
+grant ALL on ulc_DB.* to 'ricky'@'%'; # 授权所有操作
+flush privileges ;--立即启用用户权限修改
+
+pip install xlwt
+pip install xlrd
+pip install openpyxl
+pip install PyMySQL
+pip install mysql-connector-python
+
+pip install django
+pip install django-import-export
+
+pip install pandas

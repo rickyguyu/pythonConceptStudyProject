@@ -15,6 +15,7 @@ from django.conf import settings
 from datetime import datetime
 from datetime import timedelta
 
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import View
 
@@ -307,7 +308,7 @@ def prealerta(request):
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     # response = HttpResponse(content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename='+ str(datetime.today().month)+'.'+str(datetime.today().day)+"-"+clientename+"-"+container_no+'-prealerta.xlsx'
+    response['Content-Disposition'] = 'attachment; filename=PREALERT_BL_'+ str(businessinfo.booking_no)+ "_"+ container_no +"_"+clientename + "_"+ str(datetime.today().month)+'.'+str(datetime.today().day)+'.xlsx'
 
     wb = load_workbook(filename="."+settings.STATIC_URL+"Template/tPreAlerta.xlsx") #, read_only=True
     sheet = wb.get_sheet_by_name("PRE-PAYMENT-ALERT")
@@ -341,7 +342,7 @@ def prealerta(request):
         elif (i==1):
             sheet["B27"] = businessinfo.numctrs
             sheet["C27"] = "Ctr"
-            sheet["D27"] = "Logistics Services HBL:"
+            sheet["D27"] = "Logistics at Destination:"
             sheet["D28"] = "Handling + Apertura + Emision BL + Carta de Responsabilidad"
             sheet["H27"] = float(pricesList[1])
             sheet["I27"] = sheet["H27"].value
@@ -356,7 +357,7 @@ def prealerta(request):
         elif (i == 3):
             sheet["B30"] = businessinfo.numctrs
             sheet["C30"] = "Ctr"
-            sheet["D30"] = "EXTRA HBL"
+            sheet["D30"] = "EXTRA HBL/ORIGINAL FEE/GATE IN FEE"
             sheet["H30"] = float(pricesList[3])
             sheet["I30"] = sheet["H30"].value
             totalprice += float(pricesList[3])
@@ -367,22 +368,22 @@ def prealerta(request):
 
         i += 1
 
-    sheet["D32"]="Amount payable US$ "+ str(totalprice.__round__(0))
+    sheet["D32"]="Amount payable US"+ '${:,.0f}'.format(totalprice)
     sheet["D33"] = "Please pay our dollar account below"
 
-    sheet["D35"] = "Payment should be executed 2 weeks before ETA :"+ str(dateline.date()) + "."
+    sheet["D35"] = "Payment should be executed before " + str(dateline.date())
 
     sheet["B39"] = "美元(大写)金额: "
     sheet["D39"] = totalprice
 
-    sheet["I38"]= totalprice
+    sheet["I38"] = totalprice
     sheet["I42"] = totalprice
 
-    sheet["C50"] = "RICKY GU"
-    sheet["C51"] = "+56 9 551 944 08"
-    sheet["C52"] = str(datetime.today().date())
+    sheet["C50"] = ""
+    sheet["C51"] = ""
+    sheet["C52"] = ""
 
-    sheet["F50"] = "p.p. US Unnited Logistic CHile SpA"
+    sheet["F50"] = ""
 
 
 

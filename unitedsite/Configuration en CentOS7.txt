@@ -47,3 +47,197 @@ pip install django
 pip install django-import-export
 
 pip install pandas
+
+项目开始：
+自己home目录
+mkdir www
+cd www
+#git clone https://github.com/rickyguyu/pythonConceptStudyProject.git
+django-admin startproject unitedsite
+修改settings.py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'ricky',
+        'NAME': 'ulc_DB',
+        'PASSWORD': 'ricky001',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+    }
+}
+
+unitedsite 目录下
+修改 __init__.py
+import pymysql
+pymysql.install_as_MySQLdb()
+
+
+运行
+python3 manage.py showmigrations #运行环境是否成功
+python3 manage.py migrate #创建系统库
+python3 manage.py createsuperuser #创建django超级用户
+sudo firewall-cmd --zone=public --add-port=8000/tcp --permanent #打开8000端口
+sudo firewall-cmd --reload
+修改settings => ALLOWED_HOSTS = ['192.168.20.5','127.0.0.1']
+python3 manage.py runserver 192.168.20.5:8000
+
+python3 manage.py startapp polls
+copy files
+vsftpd...
+
+python3 manage.py makemigrations polls
+python3 manage.py migrate
+python3 manage.py runserver 192.168.20.5:8000
+
+export-import datas # django 项目配置完毕
+
+
+
+
+在/home/ricky/www/unitedsite目录下：
+uwsgi --socket 127.0.0.1:9000 --chdir /home/ricky/www/unitedsite --wsgi-file unitedsite/wsgi.py --master --processes 4 --threads 2
+运行成功
+
+
+文件配置：
+启动 uwsgi：
+uwsgi --ini uwsgi.ini
+查看 uwsgi启动状态：
+ps aux | grep uwsgi
+停止 uwsgi：
+uwsgi --stop uwsgi.pid
+
+修改 uwsgi.ini文件
+[uwsgi]
+# 使用nginx链接时使用
+socket=127.0.0.1:8000
+# 直接做web服务器使用 python manage.py runserver ip:port
+# http=127.0.0.1:8000
+# 项目目录 [pwd查看 直接填，不需要引号]
+chdir=/home/ricky/www/unitedsite
+# 项目中wsgi.py文件的目录，相对于项目目录
+wsgi-file=unitedsite/wsgi.py
+# 指定启动的工作进程数
+processes=4
+# 指定工作进程中的线程数
+threads=2
+# 进程中，有一个主进程
+master=True
+# 保存启动之后主进程的pid
+pidfile=uwsgi.pid
+# 设置uwsgi后台运行, uwsgi.log 保存日志信息
+daemonize=uwsgi.log
+
+脚本文件 vi /etc/init.d/uwsgid.sh
+##---------------------------------------
+
+#! /bin/sh
+
+cd /home/ricky/www/unitedsite/
+start(){
+
+# /usr/bin/su ricky -l -c "uwsgi --ini /home/ricky/www/unitedsite/uwsgi.ini"
+/home/ricky/.local/bin/uwsgi --ini /home/ricky/www/unitedsite/uwsgi.ini
+}
+
+stop(){
+#/usr/bin/su ricky -l -c "uwsgi --stop  /home/ricky/www/unitedsite/uwsgi.pid"
+/home/ricky/.local/bin/uwsgi --stop  /home/ricky/www/unitedsite/uwsgi.pid
+}
+
+case "$1" in
+
+start)
+  start
+  ;;
+stop)
+  stop
+  ;;
+restart)
+  stop
+  start
+  ;;
+*)
+  echo
+$"Usage: $0 {start|stop|restart}"
+  exit 1
+
+esac
+##------------------------
+
+设置systemctl 启动文件uwsgi：
+ sudo vi /usr/lib/systemd/system/uwsgid.service :
+##------------------
+[Unit]
+Description=uwsgid
+After=network.target
+
+[Service]
+User=ricky
+Group=ricky
+
+Type=forking
+
+ExecStart=/etc/init.d/uwsgid.sh start
+ExecReload=/etc/init.d/uwsgid.sh restart
+ExecStop=/etc/init.d/uwsgid.sh stop
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
+##---------------------------------
+自动启动：
+sudo systemctl disable uwsgid
+sudo systemctl enable uwsgid
+sudo systemctl start uwsgid
+sudo systemctl stop uwsgid
+sudo systemctl restart uwsgid
+
+
+nginx配置：
+sudo vi /etc/nginx/nginx.conf
+修改 nginx.conf文件
+     server {
+         listen 80;
+         server_name 192.168.20.5;
+         location / {
+            include uwsgi_params;
+            uwsgi_pass 127.0.0.1:9000;
+        }
+     }
+
+sudo systemctl restart nginx
+sudo systemctl enable nginx
+
+
+
+Django Course:
+
+Checkout my new Django Course!
+https://dennisivy.teachable.com/p/dja...
+
+To Do list app with User Registration, Login, Search and full Create Read Update and DELETE functionality.
+
+What are Django class based views overview video: https://youtu.be/RE0HlKch_3U
+
+Related Article: https://www.dennisivy.com/post/django...
+
+Source Code: https://github.com/divanov11/Django-T...
+
+Time Stamps
+00:00 - Intro & Product Demo
+2:25 - Project Setup
+9:38 - Setting up our models and database
+21:45 - Task List Page
+29:38 - Detail Page
+35:38 - Create Item
+46:25 - Update Item
+49:05 - Delete Item
+54:26 - Login/Logout
+1:07:12 - Restricted Pages
+1:10:29 - User Specific Data
+1:20:45 - User Registration
+1:32:12 - Search
+1:37:31 - Styling our pages
+

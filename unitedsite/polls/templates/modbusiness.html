@@ -140,11 +140,11 @@
                 document.getElementById("costhbl_dest_description").value="90+218+55";
                 document.getElementById("costhbl_dest").value=90+218+55;
             }else if (document.getElementById("shipping_line").value=="CMA"){
-                document.getElementById("costhbl_dest_description").value="90+X+X";
-                document.getElementById("costhbl_dest").value="";
+                document.getElementById("costhbl_dest_description").value="90+120+50";
+                document.getElementById("costhbl_dest").value=90+120+50;
             }else if (document.getElementById("shipping_line").value=="EMC"){
-                document.getElementById("costhbl_dest_description").value="90+X+X";
-                document.getElementById("costhbl_dest").value="";
+                document.getElementById("costhbl_dest_description").value="90+120+100";
+                document.getElementById("costhbl_dest").value=90+120+100;
             }else{
                 document.getElementById("costhbl_dest_description").value="90+X+X";
                 document.getElementById("costhbl_dest").value="";
@@ -154,13 +154,9 @@
 
         function calVenta(){
             addi_cost=0;
-            if (document.getElementById("clientname").value=="亚美ASIAMERIC"){
-                document.getElementById("toinvoice_dest_description").value =document.getElementById("venta_dest").value+"+370";
-                document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("venta_dest").value)+370;
-            }else{
-                document.getElementById("toinvoice_dest_description").value=document.getElementById("venta_dest").value;
-                document.getElementById("toinvoice_dest").value = document.getElementById("venta_dest").value;
-            }
+            document.getElementById("toinvoice_dest_description").value=document.getElementById("venta_dest").value;
+            document.getElementById("toinvoice_dest").value = document.getElementById("venta_dest").value;
+
 
             if (document.getElementById("shipping_line").value=="MSC"){
                 document.getElementById("toinvoice_dest_description").value +="+300+125";
@@ -239,6 +235,10 @@
                     document.getElementById("toinvoice_dest_description").value +="+X";
                     document.getElementById("toinvoice_dest").value="";
                 }else{;}
+            }
+            if (document.getElementById("clientname").value=="亚美ASIAMERIC"){
+                document.getElementById("toinvoice_dest_description").value +="+370";
+                document.getElementById("toinvoice_dest").value=parseFloat(document.getElementById("toinvoice_dest").value)+370;
             }
             document.getElementById("profit").value = parseFloat(document.getElementById("toinvoice_dest").value)-parseFloat(document.getElementById("costhbl_dest").value)-parseFloat(document.getElementById("topaid_org").value);
 
